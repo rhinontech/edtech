@@ -184,11 +184,11 @@ export function RealCraftSection() {
         </div>
 
         {/* COLUMN 2 (Center Mobile App Mockup) */}
-        <div className="bg-[#f3f4f6] rounded-3xl h-[650px] relative shadow-sm border border-gray-200/50 overflow-hidden">
+        <div className="bg-[#f3f4f6] rounded-3xl h-[650px] max-sm:h-[450px] relative shadow-sm border border-gray-200/50 overflow-hidden">
           <img
             src="/realCraft/image2.avif"
             alt="Live Map UI"
-            className="absolute -bottom-30 left-1/2 -translate-x-1/2 w-full max-w-[280px] sm:max-w-sm h-auto object-contain drop-shadow-lg translate-y-2 pointer-events-none"
+            className="absolute -bottom-30 left-1/2 -translate-x-1/2 w-full max-w-[320px] sm:max-w-sm h-auto object-contain drop-shadow-lg translate-y-2 pointer-events-none"
           />
         </div>
 
@@ -229,7 +229,7 @@ export function RealCraftSection() {
             </h3>
 
             {/* 3D PURPLE FLUFF SHAPE IMAGE (TOUCHES BOTTOM & RIGHT, SCALES ON HOVER) */}
-            <div className="absolute -bottom-26 right-0 w-48 md:w-68 pointer-events-none">
+            <div className="absolute -bottom-26 right-0 w-78 md:w-68  pointer-events-none">
               <img
                 src="/realCraft/image1.avif"
                 alt="Job ready shape"

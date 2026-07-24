@@ -39,7 +39,7 @@ export function FAQSection() {
   ];
 
   return (
-    <section className=" py-24  text-gray-900 font-sans antialiased ">
+    <section className=" py-24 max-sm:py-14  text-gray-900 font-sans antialiased ">
       <div className=" flex flex-col items-center text-center">
 
         {/* Top Question Mark Badge */}
@@ -59,7 +59,7 @@ export function FAQSection() {
             return (
               <div
                 key={idx}
-                className="bg-[#f4f5f7] border border-gray-200/60 rounded-2xl overflow-hidden transition-all duration-200 text-left"
+                className="bg-[#f4f5f7] border border-gray-200/60 rounded-2xl overflow-hidden text-left"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
@@ -71,11 +71,17 @@ export function FAQSection() {
                   </div>
                 </button>
 
-                {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm font-medium text-gray-500 leading-relaxed border-t border-gray-200/40">
-                    {faq.answer}
+                {/* Animated Height & Opacity Container */}
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm font-medium text-gray-500 leading-relaxed border-t border-gray-200/40">
+                      {faq.answer}
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}

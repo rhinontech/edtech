@@ -1,35 +1,194 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { PrimaryButton } from "../Common";
 
 export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const navLinks = [
+    { name: "Overview", href: "#overview" },
+    { name: "Curriculum", href: "#curriculum" },
+    { name: "Instructor", href: "#instructor" },
+    { name: "Testimonials", href: "#testimonials" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "FAQs", href: "#faqs" },
+  ];
+
+  const secondaryLinks = [
+    { name: "Privacy policy", href: "#privacy" },
+    { name: "Terms", href: "#terms" },
+    { name: "404", href: "#404" },
+  ];
+
   return (
-    <header className="relative w-full bg-white border-b border-gray-100/80 transition-all">
-
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3 cursor-pointer group">
-          <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold shadow-md group-hover:scale-105 transition-transform">
-            <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-              <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 3.32L17.84 9 12 12.18 6.16 9 12 6.32zM6 12.5v4.25l6 3.25 6-3.25V12.5l-6 3.25-6-3.25z" />
-            </svg>
+    <>
+      {/* 1. Desktop Navbar (Original exact design, visible on md screens and up) */}
+      <header className="hidden md:block relative w-full bg-white border-b border-gray-100/80 transition-all">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3 cursor-pointer group">
+            <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold shadow-md group-hover:scale-105 transition-transform">
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 3.32L17.84 9 12 12.18 6.16 9 12 6.32zM6 12.5v4.25l6 3.25 6-3.25V12.5l-6 3.25-6-3.25z" />
+              </svg>
+            </div>
+            <span className="font-extrabold text-xl tracking-tight text-gray-900">Educore</span>
           </div>
-          <span className="font-extrabold text-xl tracking-tight text-gray-900">Educore</span>
+
+          <nav className="flex items-center gap-8 text-sm font-semibold text-gray-600">
+            {navLinks.map((link) => (
+              <a key={link.name} href={link.href} className="hover:text-black transition-colors">
+                {link.name}
+              </a>
+            ))}
+          </nav>
+
+          <a
+            href="#pricing"
+            className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-200 active:scale-95 shadow-sm inline-block"
+          >
+            Enroll now
+          </a>
         </div>
+      </header>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-600">
-          <a href="#overview" className="hover:text-black transition-colors">Overview</a>
-          <a href="#curriculum" className="hover:text-black transition-colors">Curriculum</a>
-          <a href="#instructor" className="hover:text-black transition-colors">Instructor</a>
-          <a href="#testimonials" className="hover:text-black transition-colors">Testimonials</a>
-          <a href="#pricing" className="hover:text-black transition-colors">Pricing</a>
-          <a href="#faqs" className="hover:text-black transition-colors">FAQs</a>
-        </nav>
+      {/* 2. Mobile Floating Sticky Navbar Header (Single persistent navbar bar) */}
+      <header className="md:hidden sticky top-4 z-50 w-full px-4 pointer-events-none">
+        <div className="pointer-events-auto w-full max-w-md mx-auto relative">
+          {/* Persistent Floating Dark Bar */}
+          <div className="bg-[#18181b] text-white rounded-full px-5 py-3 flex items-center justify-between shadow-[0_10px_25px_rgba(0,0,0,0.25)] border border-white/10 relative z-50">
+            {/* Logo */}
+            <a href="#" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 3.32L17.84 9 12 12.18 6.16 9 12 6.32zM6 12.5v4.25l6 3.25 6-3.25V12.5l-6 3.25-6-3.25z" />
+                </svg>
+              </div>
+              <span className="font-bold text-lg text-white tracking-tight">Educore</span>
+            </a>
 
-        <a href="#pricing" className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-200 active:scale-95 shadow-sm inline-block">
-          Enroll now
-        </a>
+            {/* Toggle Button (Hamburger when closed, Close 'X' when open) */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="w-11 h-11 rounded-full bg-[#27272a] hover:bg-[#3f3f46] flex items-center justify-center text-white transition-colors cursor-pointer active:scale-95"
+            >
+              {isOpen ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 12h16M4 16h16" />
+                </svg>
+              )}
+            </button>
+          </div>
 
-      </div>
-    </header>
+          {/* Menu Card appearing right under the persistent navbar bar */}
+          {isOpen && (
+            <div className="absolute top-0 left-0 right-0 pt-20 bg-[#f8f8f8] rounded-[32px] p-5 flex flex-col border border-gray-200/60 shadow-2xl z-40 animate-slide-down">
+              {/* Main Links */}
+              <div className="flex flex-col space-y-3.5 px-2 pt-1">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-lg font-bold text-[#111111] hover:opacity-70 transition-opacity"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+
+              {/* Separator Divider Line */}
+              <div className="border-t border-gray-200/80 my-5" />
+
+              {/* Secondary Links */}
+              <div className="flex flex-col space-y-3 px-2">
+                {secondaryLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-base font-medium text-[#111111] hover:opacity-70 transition-opacity"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+
+              {/* Social Icons */}
+              <div className="flex items-center gap-3.5 my-5 px-2">
+                {/* LinkedIn */}
+                <a
+                  href="#"
+                  aria-label="LinkedIn"
+                  className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-black hover:scale-105 transition-transform"
+                >
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                  </svg>
+                </a>
+
+                {/* X / Twitter */}
+                <a
+                  href="#"
+                  aria-label="X (Twitter)"
+                  className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-black hover:scale-105 transition-transform"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </a>
+
+                {/* Instagram */}
+                <a
+                  href="#"
+                  aria-label="Instagram"
+                  className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-black hover:scale-105 transition-transform"
+                >
+                  <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                </a>
+              </div>
+
+              {/* Bottom Full-Width Button */}
+              <div className="pt-2">
+
+                <PrimaryButton className="w-full" onClick={() => setIsOpen(false)}>Enroll now</PrimaryButton>
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Full-Screen White Backdrop Overlay */}
+      {isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          className="md:hidden fixed inset-0 z-40 bg-white transition-opacity duration-300"
+        />
+      )}
+    </>
   );
 }
 
 export default Navbar;
+

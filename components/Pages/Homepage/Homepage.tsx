@@ -20,13 +20,13 @@ export function Homepage() {
       <div id="overview" className="w-full max-w-7xl">
         <Hero />
       </div>
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto max-sm:px-5">
         <RealCraftSection />
       </div>
       <div className="w-full max-w-7xl mx-auto">
         <StackedCardsSection />
       </div>
-      <div id="curriculum" className="w-full max-w-7xl  mx-auto">
+      <div id="curriculum" className="w-full max-w-7xl  mx-auto max-sm:px-5">
         <CurriculumSection />
       </div>
       <div className="w-full max-w-7xl mx-auto">
@@ -38,25 +38,25 @@ export function Homepage() {
       <div className="w-full max-w-7xl mx-auto">
         <StudentShowcaseSection />
       </div>
-      <div id="testimonials" className="w-full max-w-7xl mx-auto">
+      <div id="testimonials" className="w-full max-w-7xl mx-auto max-sm:px-5">
         <TestimonialsSection />
       </div>
-      <div id="pricing" className="w-full max-w-7xl mx-auto">
+      <div id="pricing" className="w-full max-w-7xl mx-auto max-sm:px-5">
         <PricingSection />
       </div>
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto max-sm:px-5">
         <StatsSection />
       </div>
-      <div id="instructor" className="w-full max-w-7xl mx-auto">
+      <div id="instructor" className="w-full max-w-7xl mx-auto max-sm:px-5">
         <InstructorSection />
       </div>
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto max-sm:px-5">
         <StarterKitSection />
       </div>
       <div className="w-full overflow-hidden">
         <CommunitySection />
       </div>
-      <div id="faqs" className="w-full max-w-7xl mx-auto">
+      <div id="faqs" className="w-full max-w-7xl mx-auto max-sm:px-5">
         <FAQSection />
       </div>
     </main>

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { TextAnimation } from "../Animations";
-import { PrimaryButton } from "../Common";
+import { PrimaryButton, SecondaryButton } from "../Common";
 
 export function Footer() {
   return (
@@ -16,7 +16,7 @@ export function Footer() {
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center mb-14 relative">
 
         {/* Left Floating Graphic 1 */}
-        <div className="absolute -left-16 sm:-left-36 md:-left-44 -top-6 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
+        <div className="absolute max-sm:hidden -left-16 sm:-left-36 md:-left-44 -top-6 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
           <img
             src="/footer/image1.avif"
             alt="Footer Left Graphic"
@@ -25,7 +25,7 @@ export function Footer() {
         </div>
 
         {/* Right Floating Graphic 2 (Blurred for Depth) */}
-        <div className="absolute -right-12 sm:-right-28 md:-right-36 -top-4 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
+        <div className="absolute max-sm:hidden -right-12 sm:-right-28 md:-right-36 -top-4 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
           <img
             src="/footer/image3.avif"
             alt="Footer Right Graphic"
@@ -48,12 +48,13 @@ export function Footer() {
         </p>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4">
-
-          <PrimaryButton>Enroll now</PrimaryButton>
-          <button className="bg-gray-200/80 hover:bg-gray-300/80 text-gray-900 font-bold text-sm px-8 py-3.5 rounded-full transition-all active:scale-95">
-            See curriculum
-          </button>
+        <div className="flex flex-wrap max-sm:flex-col items-center justify-center gap-4">
+          <a href="#pricing">
+            <PrimaryButton>Enroll now</PrimaryButton>
+          </a>
+          <a href="#curriculum">
+            <SecondaryButton>See curriculum</SecondaryButton>
+          </a>
         </div>
       </div >
 

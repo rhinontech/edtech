@@ -16,7 +16,7 @@ export function StarterKitSection() {
   };
 
   return (
-    <section className="py-20  text-white font-sans">
+    <section className="py-24 max-sm:py-14 text-white font-sans">
       <div className=" bg-[#0a0a0c] rounded-3xl p-6 sm:p-16  shadow-2xl flex flex-col items-center text-center">
 
         {/* Cyan Badge */}
@@ -68,11 +68,13 @@ export function StarterKitSection() {
           {/* Right Light Card: Checklist & Email Form */}
           <div className="lg:col-span-6 bg-[#e5e7eb] text-gray-900 rounded-3xl p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden border border-gray-300/80 min-h-[460px]">
 
-            {/* 3D Lime Green Ribbon Shape in top right */}
-            <div className="absolute -top-8 -right-8 w-44 h-44 pointer-events-none">
-              <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-md">
-                <path d="M 40,80 C 40,20 160,20 160,80 C 160,140 40,140 40,80 Z M 60,120 C 60,170 140,170 140,120 Z" fill="#bef264" />
-              </svg>
+            {/* 3D Lime Green Graphic image in top right */}
+            <div className="absolute max-sm:hidden -top-10 -right-14 w-44 h-44 pointer-events-none">
+              <img
+                src="/starterKit/image1.avif"
+                alt="Starter kit graphic"
+                className="w-full h-full object-contain drop-shadow-md"
+              />
             </div>
 
             {/* Checklist */}

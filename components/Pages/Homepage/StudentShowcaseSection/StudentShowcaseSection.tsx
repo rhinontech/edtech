@@ -24,9 +24,13 @@ export function StudentShowcaseSection() {
     return () => clearInterval(timer);
   }, [images.length]);
 
-  // Continuous Scroll Scale animation listener (starts from 0.5 -> 1.0 as soon as component enters view)
+  // Continuous Scroll Scale animation listener (desktop only)
   useEffect(() => {
     const handleScroll = () => {
+      if (window.innerWidth < 768) {
+        setScale(1);
+        return;
+      }
       if (sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
@@ -45,26 +49,30 @@ export function StudentShowcaseSection() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[250vh] text-gray-900 font-sans ">
+    <section ref={sectionRef} className="relative  md:py-0 md:h-[250vh] text-gray-900 font-sans">
 
-      {/* Header Badge & Title (Enters in view as normal) */}
-      <div className="flex flex-col items-center text-center pt-24 pb-12 px-4 sm:px-6">
+      {/* Header Badge & Title */}
+      <div className="flex flex-col items-center text-center pt-10 md:pt-24 pb-10 md:pb-12 px-4 sm:px-6">
         <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow-md mb-6 hover:scale-105 transition-transform cursor-pointer">
           <span className="text-lg">🧊</span>
         </div>
 
         <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight leading-tight">
-          <TextAnimation>What our students</TextAnimation> <br /> <TextAnimation>built</TextAnimation >
-        </h2 >
-      </div >
+          <TextAnimation>What our students</TextAnimation> <br /> <TextAnimation>built</TextAnimation>
+        </h2>
+      </div>
 
-      {/* Sticky Image Container (Locks into screen center when reached & scales to max-w-7xl) */}
-      < div className="sticky top-[10vh] sm:top-[12vh] w-full flex justify-center px-4 sm:px-6 z-20 pb-20" >
+      {/* Image Container (Relative on mobile, sticky on desktop) */}
+      <div className="relative md:sticky md:top-[12vh] w-full flex justify-center px-4 sm:px-6 z-20 pb-12 md:pb-20">
         <div
           className="w-full max-w-7xl rounded-3xl overflow-hidden shadow-2xl bg-gray-900 transition-transform duration-75 ease-out relative"
           style={{

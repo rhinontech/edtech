@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import FeaturedOn from "../FeaturedOn/FeaturedOn";
-import { PrimaryButton } from "@/components/Common";
+import { PrimaryButton, SecondaryButton } from "@/components/Common";
 
 
 export function Hero() {
@@ -38,12 +38,12 @@ export function Hero() {
       />
 
       {/* Main Hero Header Section */}
-      <section className="relative pt-5 pb-14 px-6 mx-auto flex flex-col items-center text-center">
+      <section className="relative pt-5 max-sm:pt-10 pb-14 px-6 mx-auto flex flex-col items-center text-center max-sm:px-6">
 
 
         {/* PARALLAX FLOATING DONUT IMAGE */}
         <div
-          className="absolute left-2 md:left-8 top-46 w-48 h-48 md:w-68 md:h-68 z-20 pointer-events-none transition-transform ease-out duration-75 filter blur-[0.4px]"
+          className="absolute max-sm:hidden left-2 md:left-8 top-46 w-48 h-48 md:w-68 md:h-68 z-20 pointer-events-none transition-transform ease-out duration-75 filter blur-[0.4px]"
           style={{
             transform: `translateY(${donutTranslateY}px) rotate(${donutRotate}deg)`,
           }}
@@ -60,7 +60,7 @@ export function Hero() {
 
         {/* PARALLAX FLOATING EARNING BLACK WIDGET CARD */}
         <div
-          className="absolute right-6 md:right-44 top-[320px] md:top-[480px] z-40 w-54 bg-[#121214] text-white rounded-3xl p-7 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)] border border-gray-800 transition-transform ease-out duration-75"
+          className="absolute max-sm:hidden right-6 md:right-44 top-[320px] md:top-[480px] z-40 w-54 bg-[#121214] text-white rounded-3xl p-7 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)] border border-gray-800 transition-transform ease-out duration-75"
           style={{
             transform: `translateY(${earningTranslateY}px) rotate(${earningRotate}deg)`,
           }}
@@ -126,16 +126,17 @@ export function Hero() {
         </p>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
-
-          <PrimaryButton>Enroll For March 15</PrimaryButton>
-          <button className="bg-gray-200/60 hover:scale-105 text-gray-900 text-base font-semibold px-6 py-4 rounded-full transition-all duration-200 active:scale-95">
-            See curriculum
-          </button>
+        <div className="flex flex-wrap max-sm:flex-col items-center justify-center gap-4 mb-10">
+          <a href="#pricing">
+            <PrimaryButton>Enroll For March 15</PrimaryButton>
+          </a>
+          <a href="#curriculum">
+            <SecondaryButton>See curriculum</SecondaryButton>
+          </a>
         </div>
 
         {/* Course Features Pills (Infinite Marquee with Gradient Mask) */}
-        <div className="relative w-full max-w-md overflow-hidden py-4 my-2 [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
+        <div className="relative w-full max-w-md max-sm:max-w-sm overflow-hidden py-4 my-2 [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
           <div className="flex w-max gap-8 animate-marquee">
             {[...Array(4)].flatMap(() => [
               { label: "Certificate", icon: "📜", bg: "bg-amber-100", text: "text-amber-600" },
@@ -375,7 +376,7 @@ export function Hero() {
       */}
 
       {/* DASHBOARD PREVIEW IMAGE */}
-      <section className="relative mx-auto pb-24">
+      <section className="relative mx-auto pb-24 max-sm:px-5">
         <div className="rounded-3xl overflow-hidden  ">
           <img
             src="/hero/image2.avif"

@@ -110,7 +110,7 @@ export function CurriculumSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
 
           {/* Left Column: Accordions list */}
-          <AnimateWrapper className="lg:col-span-7 space-y-4">
+          <AnimateWrapper className="order-2 lg:order-1 lg:col-span-7 space-y-4">
             {modules.map((mod) => {
               const isOpen = openModuleId === mod.id;
               return (
@@ -138,7 +138,7 @@ export function CurriculumSection() {
 
                   {/* Accordion Content */}
                   {isOpen && mod.topics && (
-                    <div className="px-6 pb-6 pt-2 border-t border-gray-800/60 space-y-3">
+                    <div className="px-6 pb-6 pt-2 border-t border-gray-800/60 space-y-3 animate-accordion-down overflow-hidden">
                       {mod.topics.map((topic, i) => (
                         <div
                           key={i}
@@ -160,8 +160,8 @@ export function CurriculumSection() {
             })}
           </AnimateWrapper>
 
-          {/* Right Column: Sticky "About the course" card */}
-          <AnimateWrapper className="lg:col-span-5 sticky top-10 self-start">
+          {/* Right Column: Sticky "About the course" card (sticky on desktop only) */}
+          <AnimateWrapper className="order-1 lg:order-2 lg:col-span-5 lg:sticky lg:top-10 self-start">
             <div className="bg-[#e5e7eb] text-gray-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-gray-300/80 space-y-6">
               <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
                 About the course

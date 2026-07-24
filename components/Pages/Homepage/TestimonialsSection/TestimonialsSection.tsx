@@ -77,7 +77,7 @@ export function TestimonialsSection() {
   };
 
   return (
-    <section className="py-20 text-white font-sans">
+    <section className="py-24 max-sm:py-14 text-white font-sans">
       <div className=" mx-auto bg-[#0a0a0c] rounded-3xl p-8 sm:p-14 border border-gray-800/80 shadow-2xl flex flex-col items-center text-center">
 
         {/* Lime Pill Badge */}
@@ -87,14 +87,14 @@ export function TestimonialsSection() {
 
         {/* Section Headline */}
         <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight mb-14">
-          <TextAnimation>Don’t take our</TextAnimation> <br /><TextAnimation> word</TextAnimation >
-        </h2 >
+          <TextAnimation>Don’t take our</TextAnimation> <br className="hidden sm:inline" /> <TextAnimation>word</TextAnimation>
+        </h2>
 
         {/* Testimonial Card Duo Stage */}
         <AnimateWrapper className="relative w-full max-w-4xl flex flex-col md:flex-row items-center justify-center mb-12 py-4">
 
           {/* Left Photo Card (Tilted Left, z-10) */}
-          <div className="w-full max-w-[340px] sm:max-w-[400px] h-[360px] sm:h-[420px] rounded-3xl overflow-hidden shadow-2xl border border-gray-800/80 transform md:-rotate-3 transition-transform duration-300 z-10 shrink-0">
+          <div className="w-full max-sm:hidden max-w-[340px] sm:max-w-[400px] h-[360px] sm:h-[420px] rounded-3xl overflow-hidden shadow-2xl border border-gray-800/80 transform md:-rotate-3 transition-transform duration-300 z-10 shrink-0">
             <img
               src={current.photo}
               alt={current.name}

@@ -15,7 +15,7 @@ export function InstructorSection() {
   ];
 
   return (
-    <section className="py-24  text-gray-900 font-sans antialiased ">
+    <section className="py-24 max-sm:py-14  text-gray-900 font-sans antialiased ">
       <div className=" flex flex-col items-center text-center">
 
         {/* Pill Badge */}
@@ -32,7 +32,7 @@ export function InstructorSection() {
         <AnimateWrapper className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch mb-16">
 
           {/* Left Large Photo Card */}
-          <div className="md:col-span-6 bg-gray-900 rounded-3xl overflow-hidden relative shadow-xl min-h-[620px] flex flex-col justify-end">
+          <div className="md:col-span-6 bg-gray-900 rounded-3xl overflow-hidden relative shadow-xl min-h-[620px] max-sm:min-h-[500px] flex flex-col justify-end">
             <img
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80"
               alt="Jordan Rivera"
@@ -58,31 +58,35 @@ export function InstructorSection() {
 
             {/* Top Right Card: Bio + Donut Image */}
             <div className="bg-[#f4f5f7] rounded-3xl p-8 flex flex-col justify-between overflow-hidden relative shadow-sm border border-gray-200/60 min-h-[460px] text-left">
-              <div className="max-w-md z-10">
+              <div className="max-w-md z-10 flex flex-col justify-between h-full">
                 <h3 className="text-xl sm:text-2xl font-black text-gray-900 leading-snug mb-8">
                   <TextAnimation>Former design lead at Linear and Shopify. Has shipped products used by 40M+ people and mentored designers at every level of their career.</TextAnimation>
                 </h3>
 
-                <div className="text-3xl font-black text-gray-900"><CounterNumber>2,000</CounterNumber>+</div>
-                <div className="text-xs font-semibold text-gray-500">Students taught</div>
+                <div>
+                  <div className="text-5xl font-bold text-gray-900"><CounterNumber>2,000</CounterNumber>+</div>
+                  <div className="text-xs font-semibold text-gray-500">Students taught</div>
+                </div>
               </div>
 
-              {/* Pink Donut Torus Graphic snippet on right */}
+              {/* Pink Donut Graphic image snippet on right */}
               <div className="absolute -bottom-10 -right-10 w-48 h-48 pointer-events-none">
-                <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-lg">
-                  <path d="M 100,20 C 50,20 15,55 15,100 C 15,145 50,180 100,180 C 150,180 185,145 185,100 C 185,55 150,20 100,20 Z M 100,65 C 120,65 135,80 135,100 C 135,120 120,135 100,135 C 80,135 65,120 65,100 C 65,80 80,65 100,65 Z" fill="#f472b6" />
-                </svg>
+                <img
+                  src="/instructor/image1.avif"
+                  alt="Instructor graphic"
+                  className="w-full h-full object-contain drop-shadow-lg"
+                />
               </div>
             </div>
 
             {/* Bottom Right Card: Lime Background */}
             <div className="bg-[#b4f461] text-gray-900 rounded-3xl p-8 flex flex-col justify-between text-left shadow-sm border border-lime-400/80 min-h-[160px]">
-              <p className="text-xs sm:text-sm font-extrabold leading-relaxed text-gray-950 mb-4">
+              <p className="text-md sm:text-md font-semibold leading-relaxed text-gray-950 mb-4">
                 Jordan teaches the way they wish someone had taught them: opinionated, hands-on, and allergic to fluff.
               </p>
 
               <div>
-                <div className="text-3xl font-black text-gray-950"><CounterNumber>40</CounterNumber>+</div>
+                <div className="text-5xl font-bold text-gray-950"><CounterNumber>40</CounterNumber>+</div>
                 <div className="text-xs font-bold text-gray-800">Products Shipped</div>
               </div>
             </div>

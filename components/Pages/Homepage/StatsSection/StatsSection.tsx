@@ -32,7 +32,7 @@ export function StatsSection() {
   ];
 
   return (
-    <section className="py-24 text-gray-900 font-sans antialiased ">
+    <section className="py-24 max-sm:py-14 text-gray-900 font-sans antialiased ">
       <div className="flex flex-col items-center text-center">
 
         {/* Top TV/Monitor Icon Badge */}
@@ -46,20 +46,20 @@ export function StatsSection() {
         </h2 >
 
         {/* 4 Stat Cards Row */}
-        <AnimateWrapper className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1 items-stretch">
+        <AnimateWrapper className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1 max-sm:gap-2 items-stretch">
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="bg-[#f4f5f7] rounded-xl p-8 flex flex-col items-center justify-between text-center border border-gray-200/60 shadow-sm hover:shadow-md transition-all duration-300 min-h-[220px]"
+              className="bg-[#f4f5f7] rounded-xl p-8 flex flex-col items-center justify-between text-center border border-gray-200/60 transition-all duration-300 min-h-[220px]"
             >
               {/* Icon Box */}
-              <div className={`w-9 h-9 rounded-xl ${stat.iconBg} flex items-center justify-center text-sm shadow-inner mb-6`}>
+              <div className={`w-12 h-12 rounded-lg ${stat.iconBg} flex items-center justify-center text-xl md:text-lg shadow-inner mb-6`}>
                 {stat.icon}
               </div>
 
               {/* Number Stat */}
               <div>
-                <div className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-2">
+                <div className="text-5xl md:text-5xl font-black max-sm:font-bold text-gray-900 tracking-tight mb-2">
                   <CounterNumber>{stat.number}</CounterNumber>
                 </div>
 

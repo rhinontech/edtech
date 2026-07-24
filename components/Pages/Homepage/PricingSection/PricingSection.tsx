@@ -56,7 +56,7 @@ export function PricingSection() {
   ];
 
   return (
-    <section className="py-24  text-gray-900 font-sans antialiased border-t border-gray-100">
+    <section className="py-24 max-sm:py-14 text-gray-900 font-sans antialiased ">
       <div className=" flex flex-col items-center text-center">
 
         {/* Amber Badge */}

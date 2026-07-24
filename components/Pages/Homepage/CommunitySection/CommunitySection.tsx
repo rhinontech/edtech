@@ -12,6 +12,16 @@ interface CommunityPhoto {
 
 export function CommunitySection() {
   const [currentIndex, setCurrentIndex] = useState(2); // Center initial index
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const photos: CommunityPhoto[] = [
     { id: 1, location: "Mixer Austin", url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80" },
@@ -34,7 +44,7 @@ export function CommunitySection() {
   const activeLocation = photos[currentIndex].location;
 
   return (
-    <section className="py-24 text-gray-900 font-sans antialiased">
+    <section className="py-24 max-sm:py-14 text-gray-900 font-sans antialiased">
       <div className=" flex flex-col items-center text-center">
 
         {/* Top Icon Badge */}
@@ -48,7 +58,7 @@ export function CommunitySection() {
         </h2>
 
         {/* Smooth Track Container for 5 Visible Tilted Cards */}
-        <AnimateWrapper className="relative w-full h-[360px] sm:h-[420px] flex items-center justify-center mb-10">
+        <AnimateWrapper className="relative w-full h-[320px] sm:h-[420px] flex items-center justify-center mb-10 overflow-hidden sm:overflow-visible">
           {photos.map((photo, index) => {
             // Distance from current center index
             let offset = index - currentIndex;
@@ -60,21 +70,23 @@ export function CommunitySection() {
             const isCenter = offset === 0;
             const isVisible = Math.abs(offset) <= 2; // 5 visible cards (-2, -1, 0, 1, 2)
 
-            // Smooth 3D positions, rotations & spacing
-            const positionX = offset * 260; // X offset in pixels
+            // Smooth 3D positions, rotations & spacing adjusted for mobile
+            const positionX = isMobile ? offset * 105 : offset * 260; // Tighter 105px offset on mobile
             const rotateDeg = offset * 3.5; // Smooth tilt angle per slot
-            const scale = isCenter ? 1.05 : Math.max(0.75, 1 - Math.abs(offset) * 0.08);
-            const opacity = isVisible ? (isCenter ? 1 : 0.85) : 0;
+            const scale = isCenter ? 1.05 : Math.max(0.82, 1 - Math.abs(offset) * 0.07);
+            const opacity = isVisible ? (isCenter ? 1 : 0.88) : 0;
+            const zIndex = 30 - Math.abs(offset) * 10; // Dynamic z-index layering (center=30, inner=20, outer=10)
 
             return (
               <div
                 key={photo.id}
                 onClick={() => setCurrentIndex(index)}
-                className={`absolute w-[170px] sm:w-[260px] h-[280px] sm:h-[350px] rounded-3xl overflow-hidden shadow-2xl cursor-pointer transition-all duration-700 cubic-bezier(0.25,1,0.5,1) ${isCenter ? "z-30 ring-4 ring-white/80 shadow-2xl" : "z-10"
+                className={`absolute w-[190px] sm:w-[260px] h-[260px] sm:h-[350px] rounded-3xl overflow-hidden shadow-md cursor-pointer transition-all duration-700 cubic-bezier(0.25,1,0.5,1) ${isCenter ? "ring-4 ring-white/90 shadow-2xl" : ""
                   }`}
                 style={{
                   transform: `translateX(${positionX}px) rotate(${rotateDeg}deg) scale(${scale})`,
                   opacity: opacity,
+                  zIndex: zIndex,
                   pointerEvents: isVisible ? "auto" : "none",
                 }}
               >

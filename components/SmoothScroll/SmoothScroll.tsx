@@ -1,56 +1,48 @@
 "use client";
 
 import { useEffect } from "react";
-
-declare global {
-  interface Window {
-    Lenis: any;
-  }
-}
+import Lenis from "lenis";
 
 export default function SmoothScroll() {
   useEffect(() => {
-    let lenis: any = null;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.2,
+      touchMultiplier: 1.5,
+    });
+
     let rafId: number;
-
-    const initLenis = () => {
-      if (!window.Lenis) return;
-
-      lenis = new window.Lenis({
-        duration: 1.2, // Scroll animation duration in seconds
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration curve
-        orientation: "vertical",
-        gestureOrientation: "vertical",
-        smoothWheel: true,
-        wheelMultiplier: 1.2,
-        touchMultiplier: 1.5,
-      });
-
-      function raf(time: number) {
-        lenis.raf(time);
-        rafId = requestAnimationFrame(raf);
-      }
-
+    function raf(time: number) {
+      lenis.raf(time);
       rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    // Global smooth scroll click handler for anchor links
+    const handleAnchorClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest("a");
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      if (href && href.startsWith("#") && href.length > 1) {
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          e.preventDefault();
+          lenis.scrollTo(targetElement as HTMLElement, { offset: -20 });
+        }
+      }
     };
 
-    if (window.Lenis) {
-      initLenis();
-    } else {
-      const script = document.createElement("script");
-      script.src = "https://unpkg.com/lenis@1.1.18/dist/lenis.min.js";
-      script.async = true;
-      script.onload = initLenis;
-      document.head.appendChild(script);
-    }
+    document.addEventListener("click", handleAnchorClick);
 
     return () => {
-      if (lenis) {
-        lenis.destroy();
-      }
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
+      document.removeEventListener("click", handleAnchorClick);
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
     };
   }, []);
 
