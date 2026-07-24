@@ -1,0 +1,195 @@
+"use client";
+
+import { AnimateWrapper, TextAnimation } from "@/components/Animations";
+import React, { useState } from "react";
+
+interface ProjectSlide {
+  id: number;
+  title: string;
+  subtitle: string;
+  image: string;
+}
+
+export function ProjectsCarouselSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const slides: ProjectSlide[] = [
+    {
+      id: 1,
+      title: "Visual Design",
+      subtitle: "Type, color, and layout. Turn structure into something people want to use.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      id: 2,
+      title: "Design Systems & Tokens",
+      subtitle: "Create modular components, variables, and scalable UI guidelines.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      id: 3,
+      title: "Prototyping & Interaction",
+      subtitle: "Micro-interactions, spring physics, and high-fidelity clickable flows.",
+      image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      id: 4,
+      title: "User Experience Architecture",
+      subtitle: "Map out complex user flows, wireframes, and intuitive navigation structures.",
+      image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=1200&q=80",
+    },
+    {
+      id: 5,
+      title: "Product Strategy & Handoff",
+      subtitle: "Prepare production-ready assets and seamless developer handoff documentation.",
+      image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1200&q=80",
+    },
+  ];
+
+  const isFirstSlide = currentIndex === 0;
+  const isLastSlide = currentIndex === slides.length - 1;
+
+  const nextSlide = () => {
+    if (!isLastSlide) {
+      setCurrentIndex((prev) => prev + 1);
+    }
+  };
+
+  const prevSlide = () => {
+    if (!isFirstSlide) {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  };
+
+  return (
+    <section className="py-24 text-gray-900 font-sans overflow-hidden">
+
+      {/* Header Badge & Title */}
+      <div className="max-w-[1400px] mx-auto flex flex-col items-center text-center mb-16">
+        <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow-md mb-6 hover:scale-105 transition-transform cursor-pointer">
+          <span className="text-lg">💀</span>
+        </div>
+        <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight leading-tight">
+          <TextAnimation>The project</TextAnimation> <br />{" "}
+          <TextAnimation>you’ll build</TextAnimation>
+        </h2>
+      </div>
+
+      {/* Carousel Container with Absolute Gradient Fade Overlays */}
+      <AnimateWrapper className="relative max-w-[1400px] mx-auto h-[360px] sm:h-[440px] md:h-[500px] flex items-center justify-center">
+
+        {/* Navigation Arrow Left (Disabled at first slide) */}
+        <button
+          onClick={prevSlide}
+          disabled={isFirstSlide}
+          aria-label="Previous Slide"
+          className={`absolute left-2 sm:left-6 z-50 w-15 h-11 rounded-full bg-[#f8f8f8] border border-gray-200 text-gray-800 flex items-center justify-center font-bold text-base shadow-xl transition-all ${isFirstSlide
+            ? "opacity-30 cursor-not-allowed pointer-events-none"
+            : "hover:bg-[#f8f8f8] hover:scale-110 active:scale-95 cursor-pointer"
+            }`}
+        >
+          ←
+        </button>
+
+        {/* Navigation Arrow Right (Disabled at last slide) */}
+        <button
+          onClick={nextSlide}
+          disabled={isLastSlide}
+          aria-label="Next Slide"
+          className={`absolute right-2 sm:right-6 z-50 w-15 h-11 rounded-full bg-[#f8f8f8] text-gray-800 flex items-center justify-center font-bold text-base shadow-xl transition-all ${isLastSlide
+            ? "opacity-30 cursor-not-allowed pointer-events-none"
+            : "hover:bg-[#f8f8f8] hover:scale-110 active:scale-95 cursor-pointer"
+            }`}
+        >
+          →
+        </button>
+
+        {/* ABSOLUTE LEFT GRADIENT FADE OVERLAY */}
+        <div className="absolute top-0 left-0 bottom-0 w-34 sm:w-34 md:w-30 bg-gradient-to-r from-white via-white/90 to-transparent z-40 pointer-events-none" />
+
+        {/* ABSOLUTE RIGHT GRADIENT FADE OVERLAY */}
+        <div className="absolute top-0 right-0 bottom-0 w-34 sm:w-34 md:w-30 bg-gradient-to-l from-white via-white/90 to-transparent z-40 pointer-events-none" />
+
+        {/* Slides Track */}
+        <div className="relative w-full h-full">
+          {slides.map((slide, index) => {
+            // Linear non-circular distance offset
+            const offset = index - currentIndex;
+
+            const isCurrent = offset === 0;
+
+            let leftPos = "50%";
+            let scaleVal = "scale(1)";
+            let opacityVal = 0;
+            let zIndexVal = 0;
+
+            if (isCurrent) {
+              leftPos = "50%";
+              scaleVal = "scale(1)";
+              opacityVal = 1;
+              zIndexVal = 30;
+            } else if (offset === 1) {
+              leftPos = "74%";
+              scaleVal = "scale(0.86)";
+              opacityVal = 0.65;
+              zIndexVal = 20;
+            } else if (offset === -1) {
+              leftPos = "26%";
+              scaleVal = "scale(0.86)";
+              opacityVal = 0.65;
+              zIndexVal = 20;
+            } else if (offset > 1) {
+              leftPos = "95%";
+              scaleVal = "scale(0.7)";
+              opacityVal = 0;
+              zIndexVal = 10;
+            } else {
+              leftPos = "5%";
+              scaleVal = "scale(0.7)";
+              opacityVal = 0;
+              zIndexVal = 10;
+            }
+
+            return (
+              <div
+                key={slide.id}
+                onClick={() => setCurrentIndex(index)}
+                className="absolute top-1/2 w-[70%] sm:w-[56%] md:w-[60%] max-w-2xl h-[300px] sm:h-[370px] md:h-[400px] rounded-xl cursor-pointer transition-all duration-500 ease-out bg-white shadow-[0_20px_50px_rgba(0,0,0,0.25)] "
+                style={{
+                  left: leftPos,
+                  transform: `translate(-50%, -50%) ${scaleVal}`,
+                  zIndex: zIndexVal,
+                  opacity: opacityVal,
+                }}
+              >
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            );
+          })}
+        </div>
+
+      </AnimateWrapper>
+
+      {/* Dynamic Text Section below Carousel */}
+      {
+        slides[currentIndex] && (
+          <div className="max-w-md mx-auto text-center mt-8 space-y-2 transition-all duration-300">
+            <h3 className="text-xl font-bold text-gray-900 tracking-tight">
+              {slides[currentIndex].title}
+            </h3>
+            <p className="text-sm font-normal text-gray-500 leading-relaxed">
+              {slides[currentIndex].subtitle}
+            </p>
+          </div>
+        )
+      }
+
+    </section >
+  );
+}
+
+export default ProjectsCarouselSection;
