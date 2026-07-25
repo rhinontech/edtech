@@ -60,19 +60,30 @@ export function StackedCardsSection() {
   ];
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const totalScroll = rect.height - windowHeight;
-        if (totalScroll > 0) {
-          const current = Math.max(0, Math.min(totalScroll, -rect.top));
-          setScrollProgress(current / totalScroll);
-        }
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            // Use clientHeight to prevent address bar resizing jumps on mobile browsers
+            const windowHeight = document.documentElement.clientHeight || window.innerHeight;
+            const totalScroll = rect.height - windowHeight;
+            if (totalScroll > 0) {
+              const current = Math.max(0, Math.min(totalScroll, -rect.top));
+              setScrollProgress(current / totalScroll);
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -114,11 +125,14 @@ export function StackedCardsSection() {
             return (
               <div
                 key={idx}
-                className={`absolute inset-0 rounded-3xl p-8 flex flex-col justify-between overflow-hidden   transition-transform duration-75 ease-out ${card.bg} ${card.textColor}`}
+                className={`absolute inset-0 rounded-3xl p-8 flex flex-col justify-between overflow-hidden ${card.bg} ${card.textColor}`}
                 style={{
                   zIndex: (cards.length - idx) * 10,
-                  transform: `translateY(${translateY}px) rotate(${rotate}deg) scale(${scale})`,
+                  transform: `translateY(${translateY}px) rotate(${rotate}deg) scale(${scale}) translateZ(0)`,
                   opacity: opacity,
+                  willChange: "transform, opacity",
+                  WebkitBackfaceVisibility: "hidden",
+                  backfaceVisibility: "hidden",
                 }}
               >
 
