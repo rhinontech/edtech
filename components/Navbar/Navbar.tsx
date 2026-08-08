@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { PrimaryButton } from "../Common";
 
 export function Navbar() {
@@ -19,12 +20,12 @@ export function Navbar() {
   }, [isOpen]);
 
   const navLinks = [
-    { name: "Overview", href: "#overview" },
-    { name: "Curriculum", href: "#curriculum" },
-    { name: "Instructor", href: "#instructor" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "FAQs", href: "#faqs" },
+    { name: "Overview", href: "/#overview" },
+    { name: "Programs", href: "/#programs" },
+    { name: "Mentorship", href: "/#mentorship" },
+    { name: "Community", href: "/#community" },
+    { name: "Events", href: "/events" },
+    { name: "FAQs", href: "/#faqs" },
   ];
 
   const secondaryLinks = [
@@ -38,29 +39,32 @@ export function Navbar() {
       {/* 1. Desktop Navbar (Original exact design, visible on md screens and up) */}
       <header className="hidden md:block relative w-full bg-white border-b border-gray-100/80 transition-all">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer group">
-            <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold shadow-md group-hover:scale-105 transition-transform">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 3.32L17.84 9 12 12.18 6.16 9 12 6.32zM6 12.5v4.25l6 3.25 6-3.25V12.5l-6 3.25-6-3.25z" />
-              </svg>
-            </div>
-            <span className="font-extrabold text-xl tracking-tight text-gray-900">Educore</span>
-          </div>
+          <Link href="/" className="flex items-center gap-2.5 cursor-pointer group">
+            <img
+              src="/uppercurve_logo_nav.png"
+              alt="UpperCurve logo"
+              className="h-8 w-auto group-hover:scale-105 transition-transform"
+            />
+            <span className="text-xl tracking-tight font-extrabold [font-family:var(--font-montserrat)]">
+              <span className="text-[#0B1B42]">UPPER</span>
+              <span className="text-indigo-600">CURVE</span>
+            </span>
+          </Link>
 
           <nav className="flex items-center gap-8 text-sm font-semibold text-gray-600">
             {navLinks.map((link) => (
-              <a key={link.name} href={link.href} className="hover:text-black transition-colors">
+              <Link key={link.name} href={link.href} className="hover:text-black transition-colors">
                 {link.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          <a
-            href="#pricing"
+          <Link
+            href="/#programs"
             className="bg-gray-100 hover:bg-gray-200 text-gray-900 text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-200 active:scale-95 shadow-sm inline-block"
           >
-            Enroll now
-          </a>
+            Explore programs
+          </Link>
         </div>
       </header>
 
@@ -70,14 +74,17 @@ export function Navbar() {
           {/* Persistent Floating Dark Bar */}
           <div className="bg-[#18181b] text-white rounded-full px-5 py-3 flex items-center justify-between shadow-[0_10px_25px_rgba(0,0,0,0.25)] border border-white/10 relative z-50">
             {/* Logo */}
-            <a href="#" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                  <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 3.32L17.84 9 12 12.18 6.16 9 12 6.32zM6 12.5v4.25l6 3.25 6-3.25V12.5l-6 3.25-6-3.25z" />
-                </svg>
-              </div>
-              <span className="font-bold text-lg text-white tracking-tight">Educore</span>
-            </a>
+            <Link href="/" className="flex items-center gap-2.5">
+              <img
+                src="/uppercurve_logo_nav.png"
+                alt="UpperCurve logo"
+                className="h-7 w-auto"
+              />
+              <span className="text-lg tracking-tight font-extrabold [font-family:var(--font-montserrat)]">
+                <span className="text-white">UPPER</span>
+                <span className="text-indigo-600">CURVE</span>
+              </span>
+            </Link>
 
             {/* Toggle Button (Hamburger when closed, Close 'X' when open) */}
             <button
@@ -103,14 +110,14 @@ export function Navbar() {
               {/* Main Links */}
               <div className="flex flex-col space-y-3.5 px-2 pt-1">
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.name}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
                     className="text-lg font-bold text-[#111111] hover:opacity-70 transition-opacity"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
 

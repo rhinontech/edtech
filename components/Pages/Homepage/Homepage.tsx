@@ -41,9 +41,9 @@ export function Homepage() {
       <div id="testimonials" className="w-full max-w-7xl mx-auto max-sm:px-5">
         <TestimonialsSection />
       </div>
-      <div id="pricing" className="w-full max-w-7xl mx-auto max-sm:px-5">
+      {/* <div id="pricing" className="w-full max-w-7xl mx-auto max-sm:px-5">
         <PricingSection />
-      </div>
+      </div> */}
       <div className="w-full max-w-7xl mx-auto max-sm:px-5">
         <StatsSection />
       </div>

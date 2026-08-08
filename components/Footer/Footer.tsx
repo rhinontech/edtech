@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { TextAnimation } from "../Animations";
 import { PrimaryButton, SecondaryButton } from "../Common";
 
@@ -49,12 +50,12 @@ export function Footer() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap max-sm:flex-col items-center justify-center gap-4">
-          <a href="#pricing">
+          <Link href="/#pricing">
             <PrimaryButton>Enroll now</PrimaryButton>
-          </a>
-          <a href="#curriculum">
+          </Link>
+          <Link href="/#curriculum">
             <SecondaryButton>See curriculum</SecondaryButton>
-          </a>
+          </Link>
         </div>
       </div >
 
@@ -64,12 +65,17 @@ export function Footer() {
 
           {/* Brand Info Column */}
           <div className="md:col-span-4 text-left space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs">
-                🎓
-              </div>
-              <span className="font-extrabold text-xl tracking-tight text-gray-900">Educore</span>
-            </div>
+            <Link href="/" className="flex items-center gap-2.5">
+              <img
+                src="/uppercurve_logo_nav.png"
+                alt="UpperCurve logo"
+                className="h-7 w-auto"
+              />
+              <span className="text-xl tracking-tight font-extrabold [font-family:var(--font-montserrat)]">
+                <span className="text-[#0B1B42]">UPPER</span>
+                <span className="text-indigo-600">CURVE</span>
+              </span>
+            </Link>
 
             <p className="text-xs font-normal text-gray-500 max-w-xs leading-relaxed">
               A serious design course with a sense of humor. Cohorts, mentorship, and real placements.
@@ -81,11 +87,19 @@ export function Footer() {
             <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">
               Site map
             </div>
-            {["Overview", "Curriculum", "Instructor", "Testimonials", "Pricing", "FAQs"].map((link, idx) => (
-              <div key={idx}>
-                <a href={`#${link.toLowerCase()}`} className="text-sm font-bold text-gray-900 hover:text-black transition-colors">
-                  {link}
-                </a>
+            {[
+              { name: "Overview", href: "/#overview" },
+              { name: "Curriculum", href: "/#curriculum" },
+              { name: "Instructor", href: "/#instructor" },
+              { name: "Testimonials", href: "/#testimonials" },
+              { name: "Events", href: "/events" },
+              { name: "Pricing", href: "/#pricing" },
+              { name: "FAQs", href: "/#faqs" },
+            ].map((link) => (
+              <div key={link.name}>
+                <Link href={link.href} className="text-sm font-bold text-gray-900 hover:text-black transition-colors">
+                  {link.name}
+                </Link>
               </div>
             ))}
           </div>
@@ -141,7 +155,7 @@ export function Footer() {
 
         {/* Copyright & Credits Row */}
         <div className="flex flex-wrap items-center justify-between text-xs text-gray-400 pt-8 border-t border-gray-200/40 gap-4 bg-white relative z-20">
-          <div>©2026 Educore. All Rights reserved</div>
+          <div>©2026 UpperCurve. All Rights reserved</div>
           <div>made by <b className="text-gray-900 font-black">OMAKASE</b></div>
         </div>
       </div >

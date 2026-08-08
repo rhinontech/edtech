@@ -30,7 +30,7 @@ export function FAQSection() {
     },
     {
       question: "Will I get a certificate?",
-      answer: "Yes, you will receive a verified Educore Certificate of Completion upon finishing all 6 core portfolio projects.",
+      answer: "Yes, you will receive a verified UpperCurve Certificate of Completion upon finishing all 6 core portfolio projects.",
     },
     {
       question: "Do you help with placement?",
