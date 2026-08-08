@@ -10,7 +10,7 @@ export function LogoutButton() {
   async function handleLogout() {
     setLoading(true);
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    router.push("/auth/login");
     router.refresh();
   }
 
@@ -18,7 +18,7 @@ export function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={loading}
-      className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 disabled:opacity-60"
+      className="rounded-xl border border-white/15 bg-white/5 px-3.5 py-2 text-sm font-semibold text-white/90 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {loading ? "Signing out…" : "Sign out"}
     </button>

@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { User, sequelize } = require("../models");
+const { User, Role, sequelize } = require("../models");
 const { hashPassword } = require("./password");
 
 async function bootstrapSuperadmin() {
@@ -21,13 +21,21 @@ async function bootstrapSuperadmin() {
     return existing;
   }
 
+  const superadminRole = await Role.findOne({ where: { slug: "superadmin" } });
+
+  if (!superadminRole) {
+    throw new Error(
+      "No 'superadmin' role found — run migrations first (npm run migrate)."
+    );
+  }
+
   const passwordHash = await hashPassword(password);
 
   const superadmin = await User.create({
     name,
     email,
     passwordHash,
-    role: "superadmin",
+    roleId: superadminRole.id,
     isActive: true,
   });
 

@@ -1,14 +1,21 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { SESSION_COOKIE_NAME } from "./session";
+import { SESSION_COOKIE_NAME, Role } from "./session";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
+
+export interface SidebarItemSummary {
+  key: string;
+  label: string;
+  path: string;
+}
 
 export interface BackendUser {
   id: string;
   name: string;
   email: string;
-  role: "superadmin" | "admin";
+  role: { slug: Role; name: string };
+  sidebarItems: SidebarItemSummary[];
   isActive: boolean;
   lastLoginAt: string | null;
   createdAt: string;
@@ -46,8 +53,8 @@ export async function loginRequest(email: string, password: string): Promise<Log
   return parseJsonOrThrow(res);
 }
 
-/** Reads the session cookie set on this request and calls the backend with it as a Bearer token. */
-async function authorizedFetch(path: string) {
+/** Reads the session cookie on this request and calls the backend with it as a Bearer token. */
+async function backendFetch(path: string, init: RequestInit = {}) {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
 
@@ -56,7 +63,12 @@ async function authorizedFetch(path: string) {
   }
 
   const res = await fetch(`${BACKEND_URL}${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    ...init,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(init.body ? { "Content-Type": "application/json" } : {}),
+      ...init.headers,
+    },
     cache: "no-store",
   });
 
@@ -64,7 +76,7 @@ async function authorizedFetch(path: string) {
 }
 
 export async function getCurrentUser(): Promise<BackendUser> {
-  const data = await authorizedFetch("/api/auth/me");
+  const data = await backendFetch("/api/auth/me");
   return data.user;
 }
 
@@ -74,5 +86,51 @@ export interface AdminOverview {
 }
 
 export async function getAdminOverview(): Promise<AdminOverview> {
-  return authorizedFetch("/api/admin/overview");
+  return backendFetch("/api/admin/overview");
+}
+
+export interface RoleSummary {
+  id: string;
+  name: string;
+  slug: string;
+  isSystem: boolean;
+  userCount: number;
+  sidebarItemKeys: string[];
+}
+
+export interface SidebarCatalogItem extends SidebarItemSummary {
+  isEnabled: boolean;
+}
+
+export async function listRoles(): Promise<RoleSummary[]> {
+  const data = await backendFetch("/api/roles");
+  return data.roles;
+}
+
+export async function getSidebarCatalog(): Promise<SidebarCatalogItem[]> {
+  const data = await backendFetch("/api/sidebar-items");
+  return data.sidebarItems;
+}
+
+export async function createRole(input: { name: string; sidebarItemKeys: string[] }) {
+  const data = await backendFetch("/api/roles", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+  return data.role as RoleSummary;
+}
+
+export async function updateRole(
+  id: string,
+  input: { name?: string; sidebarItemKeys?: string[] }
+) {
+  const data = await backendFetch(`/api/roles/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+  return data.role as RoleSummary;
+}
+
+export async function deleteRole(id: string) {
+  await backendFetch(`/api/roles/${id}`, { method: "DELETE" });
 }

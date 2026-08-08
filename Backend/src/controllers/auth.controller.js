@@ -1,4 +1,4 @@
-const { User, sequelize } = require("../models");
+const { User, Role, SidebarItem, sequelize } = require("../models");
 const { comparePassword } = require("../utils/password");
 const { signToken } = require("../utils/jwt");
 
@@ -9,7 +9,10 @@ async function login(req, res) {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  const user = await User.findOne({ where: { email: String(email).toLowerCase().trim() } });
+  const user = await User.findOne({
+    where: { email: String(email).toLowerCase().trim() },
+    include: [{ model: Role, as: "Role", include: [{ model: SidebarItem, as: "SidebarItems" }] }],
+  });
 
   if (!user || !user.isActive) {
     return res.status(401).json({ message: "Invalid email or password" });
@@ -41,14 +44,15 @@ async function logout(req, res) {
 }
 
 async function overview(req, res) {
-  const rows = await User.findAll({
-    attributes: ["role", [sequelize.fn("COUNT", sequelize.col("id")), "count"]],
-    group: ["role"],
-    raw: true,
-  });
+  const [rows] = await sequelize.query(`
+    SELECT r.slug AS role, COUNT(u.id)::int AS count
+    FROM roles r
+    LEFT JOIN users u ON u.role_id = r.id
+    GROUP BY r.slug
+  `);
 
   const byRole = rows.reduce((acc, row) => {
-    acc[row.role] = Number(row.count);
+    acc[row.role] = row.count;
     return acc;
   }, {});
 

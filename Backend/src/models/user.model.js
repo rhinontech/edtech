@@ -24,10 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "password_hash",
       },
-      role: {
-        type: DataTypes.ENUM("superadmin", "admin"),
+      roleId: {
+        type: DataTypes.UUID,
         allowNull: false,
-        defaultValue: "admin",
+        field: "role_id",
       },
       isActive: {
         type: DataTypes.BOOLEAN,
@@ -47,12 +47,25 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  User.associate = (models) => {
+    User.belongsTo(models.Role, { foreignKey: "roleId", as: "Role" });
+  };
+
+  // Requires `Role` (and, for the sidebar, `Role.SidebarItems`) to already be
+  // eager-loaded on the instance — see authenticate.js / auth.controller.js.
   User.prototype.toPublicJSON = function toPublicJSON() {
+    const role = this.Role;
+    const sidebarItems = (role?.SidebarItems || [])
+      .filter((item) => item.isEnabled)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((item) => ({ key: item.key, label: item.label, path: item.path }));
+
     return {
       id: this.id,
       name: this.name,
       email: this.email,
-      role: this.role,
+      role: { slug: role.slug, name: role.name },
+      sidebarItems,
       isActive: this.isActive,
       lastLoginAt: this.lastLoginAt,
       createdAt: this.createdAt,

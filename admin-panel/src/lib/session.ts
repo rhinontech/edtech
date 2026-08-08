@@ -5,7 +5,9 @@ export const SESSION_COOKIE_NAME = process.env.SESSION_COOKIE_NAME || "admin_ses
 
 const encodedSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-export type Role = "superadmin" | "admin";
+// Roles are created dynamically (see the Roles admin screen), so this is
+// just a slug string — "superadmin" and "admin" are the two built-in ones.
+export type Role = string;
 
 export interface SessionPayload {
   sub: string;

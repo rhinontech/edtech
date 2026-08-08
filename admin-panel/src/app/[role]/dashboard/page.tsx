@@ -8,11 +8,10 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const [user, overview] = await Promise.all([getCurrentUser(), getAdminOverview()]);
 
-  const cards = [
-    { label: "Total users", value: overview.totalUsers },
-    { label: "Superadmins", value: overview.byRole.superadmin ?? 0 },
-    { label: "Admins", value: overview.byRole.admin ?? 0 },
-  ];
+  const roleCards = Object.entries(overview.byRole).map(([slug, count]) => ({
+    label: slug,
+    value: count,
+  }));
 
   return (
     <div className="max-w-5xl">
@@ -24,13 +23,19 @@ export default async function DashboardPage() {
       </p>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {cards.map((card) => (
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="text-3xl font-extrabold text-slate-900">{overview.totalUsers}</div>
+          <div className="mt-1 text-sm font-medium text-slate-500">Total users</div>
+        </div>
+        {roleCards.map((card) => (
           <div
             key={card.label}
             className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
           >
             <div className="text-3xl font-extrabold text-slate-900">{card.value}</div>
-            <div className="mt-1 text-sm font-medium text-slate-500">{card.label}</div>
+            <div className="mt-1 text-sm font-medium text-slate-500 capitalize">
+              {card.label}
+            </div>
           </div>
         ))}
       </div>
@@ -48,7 +53,7 @@ export default async function DashboardPage() {
           </div>
           <div>
             <dt className="text-slate-400">Role</dt>
-            <dd className="font-semibold text-slate-800 capitalize">{user.role}</dd>
+            <dd className="font-semibold text-slate-800">{user.role.name}</dd>
           </div>
           <div>
             <dt className="text-slate-400">Last login</dt>
