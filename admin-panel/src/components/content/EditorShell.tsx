@@ -7,7 +7,7 @@ import { ArrowLeft, Copy, ExternalLink, Eye, Loader2, MoreHorizontal, PencilLine
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { ContentStatus } from "@/lib/content";
-import { Button } from "@/components/ui/button";
+import { button } from "@/lib/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -137,18 +137,20 @@ export function useContentDocument<T extends { status: ContentStatus; slug: stri
   return { doc, patch, save, saving, savedStatus, savedSlug, hasUnsaved, destroy };
 }
 
-function StatusPill({ status, note }: { status: ContentStatus | "New"; note?: string | null }) {
-  const styles = {
-    New: "bg-gray-100 border-gray-200/70 text-gray-600",
-    Draft: "bg-amber-50 border-amber-200/80 text-amber-700",
-    Published: "bg-emerald-50 border-emerald-200 text-emerald-700",
-  }[status];
+const STATUS_DOT = { New: "bg-gray-300", Draft: "bg-amber-400", Published: "bg-emerald-500" } as const;
 
+/** Two-column editor body: a centred writing column and a scrolling settings panel. */
+export function EditorColumns({ main, rail }: { main: React.ReactNode; rail: React.ReactNode }) {
   return (
-    <span className={cn("inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold", styles)}>
-      <span className={cn("h-1.5 w-1.5 rounded-full bg-current", status === "Published" && "animate-pulse")} />
-      {note || status}
-    </span>
+    <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="min-w-0 px-5 pb-24 pt-10 md:px-10">
+        <div className="mx-auto max-w-[720px]">{main}</div>
+      </div>
+      {/* 7.5rem = topbar (h-16) + editor bar (h-14). */}
+      <aside className="border-t border-gray-100 bg-gray-50/40 xl:sticky xl:top-14 xl:h-[calc(100vh-7.5rem)] xl:overflow-y-auto xl:border-l xl:border-t-0">
+        {rail}
+      </aside>
+    </div>
   );
 }
 
@@ -179,7 +181,7 @@ export function EditorShell({
   statusNote?: string | null;
   hasUnsaved: boolean;
   saving: ContentStatus | null;
-  /** Set once the item is live, for "View live". */
+  /** Set once the item is live, for "View on website". */
   liveUrl: string | null;
   publicUrl: string;
   tab: EditorTab;
@@ -190,6 +192,7 @@ export function EditorShell({
 }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const published = savedStatus === "Published";
+  const status = isNew ? "New" : savedStatus;
 
   function leave(e: React.MouseEvent) {
     if (hasUnsaved && !window.confirm("You have unsaved changes. Leave without saving?")) {
@@ -198,81 +201,63 @@ export function EditorShell({
   }
 
   return (
-    <div className="-mx-6 -mt-6 md:-mx-8 md:-mt-8">
-      {/* Negative top cancels <main>'s padding (p-6 / md:p-8), which sticky
-          offsets are measured inside — so the bar sits flush under the topbar. */}
-      <header className="sticky -top-6 z-30 flex h-16 md:-top-8 items-center gap-3 border-b border-gray-200/80 bg-white/90 px-4 backdrop-blur md:px-8">
-        <div className="flex min-w-0 flex-1 items-center gap-3">
-          <Link
-            href={listHref}
-            onClick={leave}
-            className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-gray-200/80 bg-white px-3 py-1.5 text-xs font-bold text-gray-600 shadow-2xs transition-colors hover:text-[#0066FF]"
-          >
-            <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
-            {listLabel}
+    <div>
+      <header className="sticky top-0 z-30 grid h-14 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 border-b border-gray-100 bg-white/90 px-3 backdrop-blur-md md:px-5">
+        <div className="flex min-w-0 items-center gap-2">
+          <Link href={listHref} onClick={leave} className={button.icon} aria-label={`Back to ${listLabel}`} title={`Back to ${listLabel}`}>
+            <ArrowLeft />
           </Link>
           <div className="hidden min-w-0 items-center gap-2.5 sm:flex">
-            <span className="truncate text-sm font-black tracking-tight text-gray-900">
+            <span className="truncate text-[13px] font-medium text-gray-900">
               {title || (isNew ? `New ${noun}` : "Untitled")}
             </span>
-            <StatusPill status={isNew ? "New" : savedStatus} note={isNew ? null : statusNote} />
-            <span className="hidden text-xs font-medium text-gray-400 lg:inline">
-              {saving ? "Saving…" : hasUnsaved ? "Unsaved changes" : "All changes saved"}
+            <span className="flex shrink-0 items-center gap-1.5 text-xs text-gray-500">
+              <span className={cn("size-1.5 rounded-full", STATUS_DOT[status])} />
+              {(!isNew && statusNote) || status}
+            </span>
+            <span className="hidden shrink-0 text-xs text-gray-400 lg:inline">
+              · {saving ? "Saving…" : hasUnsaved ? "Unsaved changes" : "Saved"}
             </span>
           </div>
         </div>
 
-        <Tabs value={tab} onValueChange={(v) => onTabChange(v as EditorTab)} className="shrink-0">
-          <TabsList className="h-9 rounded-full bg-gray-100 p-1">
-            <TabsTrigger value="edit" className="rounded-full px-3.5 text-xs font-bold">
-              <PencilLine /> Edit
+        <Tabs value={tab} onValueChange={(v) => onTabChange(v as EditorTab)}>
+          <TabsList className="h-8 rounded-full bg-gray-100 p-0.5">
+            <TabsTrigger value="edit" className="h-7 rounded-full border-0 px-3 text-xs font-medium text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
+              <PencilLine className="size-3.5" /> Edit
             </TabsTrigger>
-            <TabsTrigger value="preview" className="rounded-full px-3.5 text-xs font-bold">
-              <Eye /> Preview
+            <TabsTrigger value="preview" className="h-7 rounded-full border-0 px-3 text-xs font-medium text-gray-500 data-[state=active]:text-gray-900 data-[state=active]:shadow-[0_1px_2px_rgba(0,0,0,0.08)]">
+              <Eye className="size-3.5" /> Preview
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
-        <div className="flex shrink-0 items-center gap-2">
-          {published ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden rounded-full font-bold text-gray-600 md:inline-flex"
-              disabled={!!saving}
-              onClick={() => onSave("Draft")}
-            >
-              {saving === "Draft" && <Loader2 className="animate-spin" />} Unpublish
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full font-bold"
-              disabled={!!saving}
-              onClick={() => onSave("Draft")}
-            >
-              {saving === "Draft" && <Loader2 className="animate-spin" />} Save draft
-            </Button>
-          )}
-          <Button
-            size="sm"
-            className="rounded-full bg-gray-900 px-4 font-bold hover:bg-gray-800"
+        <div className="flex min-w-0 items-center justify-end gap-1.5">
+          <button
+            type="button"
+            className={cn(button.ghost, "hidden h-8 md:inline-flex")}
             disabled={!!saving}
-            onClick={() => onSave("Published")}
+            onClick={() => onSave("Draft")}
           >
+            {saving === "Draft" && <Loader2 className="animate-spin" />}
+            {published ? "Unpublish" : "Save draft"}
+          </button>
+          <button type="button" className={cn(button.primary, "h-8 px-3.5")} disabled={!!saving} onClick={() => onSave("Published")}>
             {saving === "Published" && <Loader2 className="animate-spin" />}
             {published ? "Update" : "Publish"}
-          </Button>
+          </button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-8 rounded-full" aria-label="More actions">
+              <button type="button" className={button.icon} aria-label="More actions">
                 <MoreHorizontal />
-              </Button>
+              </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-52 rounded-xl">
-              <DropdownMenuItem disabled={!liveUrl} asChild={!!liveUrl}>
+            <DropdownMenuContent align="end" sideOffset={6} className="w-52 rounded-xl p-1.5">
+              <DropdownMenuItem className="rounded-lg text-[13px] md:hidden" onSelect={() => onSave("Draft")}>
+                <PencilLine /> {published ? "Unpublish" : "Save draft"}
+              </DropdownMenuItem>
+              <DropdownMenuItem className="rounded-lg text-[13px]" disabled={!liveUrl} asChild={!!liveUrl}>
                 {liveUrl ? (
                   <a href={liveUrl} target="_blank" rel="noreferrer">
                     <ExternalLink /> View on website
@@ -284,6 +269,7 @@ export function EditorShell({
                 )}
               </DropdownMenuItem>
               <DropdownMenuItem
+                className="rounded-lg text-[13px]"
                 onSelect={() => {
                   navigator.clipboard.writeText(publicUrl).then(
                     () => toast.success("Link copied"),
@@ -293,15 +279,10 @@ export function EditorShell({
               >
                 <Copy /> Copy public link
               </DropdownMenuItem>
-              {published && (
-                <DropdownMenuItem className="md:hidden" onSelect={() => onSave("Draft")}>
-                  <PencilLine /> Unpublish
-                </DropdownMenuItem>
-              )}
               {!isNew && (
                 <>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem variant="destructive" onSelect={() => setConfirmOpen(true)}>
+                  <DropdownMenuItem variant="destructive" className="rounded-lg text-[13px]" onSelect={() => setConfirmOpen(true)}>
                     <Trash2 /> Delete {noun}
                   </DropdownMenuItem>
                 </>
@@ -311,7 +292,7 @@ export function EditorShell({
         </div>
       </header>
 
-      <div className="px-4 py-6 md:px-8 md:py-8">{children}</div>
+      {children}
 
       <ConfirmDelete
         open={confirmOpen}

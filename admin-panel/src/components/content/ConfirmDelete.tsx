@@ -28,17 +28,17 @@ export function ConfirmDelete({
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="rounded-3xl">
+      <AlertDialogContent className="rounded-2xl border-gray-200/70 shadow-[0_24px_64px_-16px_rgba(0,0,0,0.2)] sm:max-w-md">
         <AlertDialogHeader>
-          <AlertDialogTitle className="font-black tracking-tight">Delete this {what}?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className="text-base font-semibold tracking-[-0.01em]">Delete this {what}?</AlertDialogTitle>
+          <AlertDialogDescription className="text-[13px] leading-relaxed">
             “{name || "Untitled"}” will be permanently removed
             {published ? " and taken off the website immediately" : ""}. This can&apos;t be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="rounded-full">Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" className="rounded-full" onClick={onConfirm}>
+          <AlertDialogCancel className="h-9 rounded-full text-[13px] font-medium shadow-none">Cancel</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" className="h-9 rounded-full text-[13px] font-medium shadow-none" onClick={onConfirm}>
             Delete {what}
           </AlertDialogAction>
         </AlertDialogFooter>

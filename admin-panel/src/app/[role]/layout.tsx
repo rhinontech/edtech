@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser, BackendError } from "@/lib/backend";
+import { getCurrentUser, BackendError, SITE_URL } from "@/lib/backend";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 
@@ -25,17 +25,14 @@ export default async function RoleLayout({ children, params }: LayoutProps<"/[ro
 
   return (
     // App shell: the viewport never scrolls — only <main> does — so the
-    // sidebar and topbar stay put. Sticky elements inside pages (editor
-    // headers, toolbars) stick to the top of <main>, just below the topbar.
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar + Topbar share the same navy background with no border
-          between them, so they read as one dark shell wrapping the white
-          content canvas. */}
-      <Sidebar role={user.role.slug} items={user.sidebarItems} />
+    // header and sidebar stay put. Pages own their padding, so sticky bars
+    // inside them (editor headers, toolbars) sit flush at the top of <main>.
+    <div className="flex h-screen flex-col overflow-hidden bg-white">
+      <Topbar user={user} siteUrl={SITE_URL} />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar user={user} />
-        <main className="min-h-0 flex-1 overflow-y-auto bg-white p-6 md:p-8">{children}</main>
+      <div className="flex min-h-0 flex-1">
+        <Sidebar role={user.role.slug} items={user.sidebarItems} siteUrl={SITE_URL} />
+        <main className="min-w-0 flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

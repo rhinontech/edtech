@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { button } from "@/lib/ui";
 
 export function LoginForm() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1.5">
+        <label htmlFor="email" className="mb-1.5 block text-xs font-medium text-gray-600">
           Email
         </label>
         <input
@@ -55,12 +56,12 @@ export function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+          className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.03)] outline-none transition placeholder:text-gray-400 focus:border-gray-300 focus:ring-[3px] focus:ring-indigo-500/15"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-1.5">
+        <label htmlFor="password" className="mb-1.5 block text-xs font-medium text-gray-600">
           Password
         </label>
         <input
@@ -71,12 +72,12 @@ export function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+          className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.03)] outline-none transition placeholder:text-gray-400 focus:border-gray-300 focus:ring-[3px] focus:ring-indigo-500/15"
         />
       </div>
 
       {error && (
-        <div className="rounded-xl bg-rose-50 border border-rose-200 px-4 py-2.5 text-sm font-medium text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-3 py-2 text-[13px] text-rose-700 ring-1 ring-rose-100">
           {error}
         </div>
       )}
@@ -84,7 +85,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className={`${button.primary} mt-2 h-10 w-full`}
       >
         {loading ? "Signing in…" : "Sign in"}
       </button>

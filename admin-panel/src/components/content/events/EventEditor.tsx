@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, CheckCheck, Clock3, Image as ImageIcon, Info, ListChecks, UserRound } from "lucide-react";
-import { cn } from "@/lib/utils";
 import {
   EVENT_TYPES,
   formatEventDateLabel,
@@ -16,11 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { contentApi } from "../api";
-import { EditorShell, useContentDocument, type EditorTab } from "../EditorShell";
+import { EditorColumns, EditorShell, useContentDocument, type EditorTab } from "../EditorShell";
 import {
   Field,
-  RailCard,
-  SectionCard,
+  RailSection,
+  Section,
   SegmentedControl,
   SeoFields,
   SlugField,
@@ -107,7 +105,7 @@ export function EventEditor({ event, basePath, siteUrl }: { event?: EventItem; b
       title={doc.title}
       isNew={!event}
       savedStatus={savedStatus}
-      statusNote={savedStatus === "Published" && past ? "Published · Past" : null}
+      statusNote={savedStatus === "Published" && past ? "Published · past" : null}
       hasUnsaved={hasUnsaved}
       saving={saving}
       liveUrl={event && savedStatus === "Published" ? `${siteUrl}/events/${savedSlug}` : null}
@@ -118,264 +116,221 @@ export function EventEditor({ event, basePath, siteUrl }: { event?: EventItem; b
       onDelete={destroy}
     >
       {tab === "preview" ? (
-        <div className="mx-auto max-w-7xl space-y-10">
+        <div className="mx-auto max-w-7xl space-y-10 px-5 py-10 md:px-10">
           <div>
-            <div className="mb-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Card on /events</div>
+            <div className="mb-3 text-xs font-medium text-gray-500">Card on the events page</div>
             <div className="uc-site">
               <EventCard event={doc} siteUrl={siteUrl} />
             </div>
           </div>
           <div>
-            <div className="mb-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">Event page</div>
+            <div className="mb-3 text-xs font-medium text-gray-500">Event page</div>
             <BrowserFrame url={`${siteHost}${publicPath}`}>
               <EventDetailsPage event={doc} siteUrl={siteUrl} />
             </BrowserFrame>
           </div>
         </div>
       ) : (
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="min-w-0 space-y-6">
-            <SectionCard title="Event details" description="The basics shown on the card and at the top of the page." icon={<Info className="size-5" />}>
-              <Field label="Title">
-                <Input
+        <EditorColumns
+          main={
+            <div className="space-y-10">
+              <div>
+                <div className="mb-4 flex items-center gap-2 text-xs text-gray-400">
+                  <span>{doc.type || "Event"}</span>
+                  <span>·</span>
+                  <span>{doc.mode}</span>
+                  {dateLabel && (
+                    <>
+                      <span>·</span>
+                      <span>{dateLabel}</span>
+                    </>
+                  )}
+                </div>
+                <textarea
                   value={doc.title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Building with AI Tools"
-                  className={cn(fieldClass, "h-12 text-lg font-black tracking-tight")}
+                  onChange={(e) => setTitle(e.target.value.replace(/\n/g, " "))}
+                  placeholder="Event title"
+                  aria-label="Title"
+                  rows={1}
+                  className="field-sizing-content w-full resize-none bg-transparent text-[40px] font-semibold leading-[1.1] tracking-[-0.03em] text-gray-900 outline-none placeholder:text-gray-300"
                 />
-              </Field>
-              <Field label="Tagline">
-                <Textarea
+                <textarea
                   value={doc.tagline}
                   onChange={(e) => patch({ tagline: e.target.value })}
-                  placeholder="A hands-on workshop: build a working AI-powered mini-project in two hours and take it home."
-                  className={cn(textareaClass, "min-h-20")}
+                  placeholder="One line on what attendees get — shown on the card and the event page."
+                  aria-label="Tagline"
+                  rows={1}
+                  className="field-sizing-content mt-3 w-full resize-none bg-transparent text-lg leading-relaxed text-gray-500 outline-none placeholder:text-gray-300"
                 />
-              </Field>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Type">
-                  <Input
-                    list="event-types"
-                    value={doc.type}
-                    onChange={(e) => patch({ type: e.target.value })}
-                    placeholder="Workshop"
-                    className={fieldClass}
-                  />
-                  <datalist id="event-types">
-                    {EVENT_TYPES.map((type) => (
-                      <option key={type} value={type} />
-                    ))}
-                  </datalist>
-                </Field>
-                <Field label="Format" group>
-                  <div className="flex h-11 items-center">
+              </div>
+
+              <Section title="When & where">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field label="Type">
+                    <Input list="event-types" value={doc.type} onChange={(e) => patch({ type: e.target.value })} placeholder="Workshop" className={fieldClass} />
+                    <datalist id="event-types">
+                      {EVENT_TYPES.map((type) => (
+                        <option key={type} value={type} />
+                      ))}
+                    </datalist>
+                  </Field>
+                  <Field label="Format" group>
                     <SegmentedControl value={doc.mode} options={MODES} onChange={(mode) => patch({ mode })} />
+                  </Field>
+                  <Field label="Starts" group>
+                    <DatePicker value={doc.startDate} onChange={(startDate) => patch({ startDate })} placeholder="Pick a date" className={fieldClass} />
+                  </Field>
+                  <Field label="Ends" group>
+                    <DatePicker value={doc.endDate} onChange={(endDate) => patch({ endDate })} placeholder="Same day (optional)" className={fieldClass} />
+                  </Field>
+                  <Field label="Time">
+                    <Input value={doc.timeLabel} onChange={(e) => patch({ timeLabel: e.target.value })} placeholder="6:00 PM IST" className={fieldClass} />
+                  </Field>
+                  <Field label="Location">
+                    <Input
+                      value={doc.location}
+                      onChange={(e) => patch({ location: e.target.value })}
+                      placeholder={doc.mode === "Online" ? "Online · Zoom" : "Bengaluru · HSR Layout"}
+                      className={fieldClass}
+                    />
+                  </Field>
+                </div>
+                {past && <p className="text-xs text-amber-600">This date has passed — the event shows under past events.</p>}
+              </Section>
+
+              <Section title="Card artwork" description="The poster on the events page. A thumbnail in the settings panel replaces it.">
+                <div className="uc-site overflow-hidden rounded-xl">
+                  <EventBanner event={doc} siteUrl={siteUrl} className="min-h-60" />
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field label="Colour" group className="sm:col-span-2">
+                    <ThemePicker value={doc.theme} onChange={(theme) => patch({ theme })} />
+                  </Field>
+                  <Field label="Ribbon">
+                    <Input value={doc.poster.ribbon} onChange={(e) => setPoster({ ribbon: e.target.value })} placeholder="FOR WORKING PROFESSIONALS" className={fieldClass} />
+                  </Field>
+                  <Field label="Headline">
+                    <Input value={doc.poster.title} onChange={(e) => setPoster({ title: e.target.value })} placeholder={doc.title || "Defaults to the title"} className={fieldClass} />
+                  </Field>
+                  <Field label="Subtitle" className="sm:col-span-2">
+                    <Input value={doc.poster.subtitle} onChange={(e) => setPoster({ subtitle: e.target.value })} placeholder={doc.tagline || "Defaults to the tagline"} className={fieldClass} />
+                  </Field>
+                  <Field label="Badge">
+                    <Input value={doc.poster.badgeText} onChange={(e) => setPoster({ badgeText: e.target.value })} placeholder={doc.mode.toUpperCase()} className={fieldClass} />
+                  </Field>
+                  <Field label="Badge caption">
+                    <Input value={doc.poster.badgeType} onChange={(e) => setPoster({ badgeType: e.target.value })} placeholder={doc.type || "Masterclass"} className={fieldClass} />
+                  </Field>
+                </div>
+              </Section>
+
+              <Section title="About this session">
+                <RichTextEditor
+                  initialHtml={doc.aboutHtml}
+                  onChange={(aboutHtml) => patch({ aboutHtml })}
+                  folder="events"
+                  minHeight="min-h-[160px]"
+                  placeholder="What happens in the session, and why it's worth the time…"
+                />
+              </Section>
+
+              <Section title="What you'll build & take home" description="Press Enter to add the next one.">
+                <BulletListEditor
+                  items={doc.takeaways}
+                  onChange={(takeaways) => patch({ takeaways })}
+                  placeholder="A working AI mini-project you built yourself"
+                  addLabel="Add takeaway"
+                />
+              </Section>
+
+              <Section title="Agenda">
+                <AgendaEditor slots={doc.agenda} onChange={(agenda) => patch({ agenda })} />
+              </Section>
+
+              <Section title="Who it's for">
+                <BulletListEditor
+                  items={doc.audience}
+                  onChange={(audience) => patch({ audience })}
+                  placeholder="Developers who want to ship real agentic workflows"
+                  addLabel="Add audience"
+                />
+              </Section>
+
+              <Section title="Instructor" description="Leave the name empty to hide the instructor on the page.">
+                <div className="flex items-start gap-4">
+                  <ImageInput value={doc.instructor.avatar} onChange={(avatar) => setInstructor({ avatar })} folder="events" siteUrl={siteUrl} compact />
+                  <div className="grid min-w-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field label="Name">
+                      <Input value={doc.instructor.name} onChange={(e) => setInstructor({ name: e.target.value })} placeholder="Ankit Kumar" className={fieldClass} />
+                    </Field>
+                    <Field label="Role">
+                      <Input value={doc.instructor.role} onChange={(e) => setInstructor({ role: e.target.value })} placeholder="AI Engineer & Mentor" className={fieldClass} />
+                    </Field>
                   </div>
+                </div>
+                <Field label="Bio">
+                  <Textarea value={doc.instructor.bio} onChange={(e) => setInstructor({ bio: e.target.value })} placeholder="A couple of sentences on their background." className={textareaClass} />
                 </Field>
-              </div>
-              <Field label="Location" hint="Shown as the event's “Mode”, e.g. the platform or the venue.">
-                <Input
-                  value={doc.location}
-                  onChange={(e) => patch({ location: e.target.value })}
-                  placeholder={doc.mode === "Online" ? "Online · Zoom" : "Bengaluru · HSR Layout"}
-                  className={fieldClass}
-                />
-              </Field>
-            </SectionCard>
-
-            <SectionCard title="Date & time" icon={<CalendarDays className="size-5" />}>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <Field label="Starts" group>
-                  <DatePicker
-                    value={doc.startDate}
-                    onChange={(startDate) => patch({ startDate })}
-                    placeholder="Pick a date"
-                    className={fieldClass}
-                  />
+                <Field label="Highlights" group hint="Short badges such as “Ex-Tech Lead”.">
+                  <ChipListEditor items={doc.instructor.highlights} onChange={(highlights) => setInstructor({ highlights })} placeholder="Add a highlight and press Enter" />
                 </Field>
-                <Field label="Ends" group hint="Only for multi-day events.">
-                  <DatePicker
-                    value={doc.endDate}
-                    onChange={(endDate) => patch({ endDate })}
-                    placeholder="Same day"
-                    className={fieldClass}
-                  />
-                </Field>
-                <Field label="Time">
-                  <Input
-                    value={doc.timeLabel}
-                    onChange={(e) => patch({ timeLabel: e.target.value })}
-                    placeholder="6:00 PM IST"
-                    className={fieldClass}
-                  />
-                </Field>
-              </div>
-              {(dateLabel || doc.timeLabel) && (
-                <p className="text-xs font-semibold text-gray-500">
-                  Shows as <span className="rounded-md bg-blue-50 px-2 py-1 font-bold text-[#0066FF]">{[dateLabel, doc.timeLabel].filter(Boolean).join(" · ")}</span>
-                  {past && <span className="ml-2 text-amber-600">This date has passed.</span>}
-                </p>
-              )}
-            </SectionCard>
-
-            <SectionCard
-              title="Card artwork"
-              description="The poster on the events list. Upload a thumbnail in the sidebar to use an image instead."
-              icon={<ImageIcon className="size-5" />}
-            >
-              <div className="uc-site overflow-hidden rounded-2xl">
-                <EventBanner event={doc} siteUrl={siteUrl} className="min-h-[250px]" />
-              </div>
-              <Field label="Colour" group>
-                <ThemePicker value={doc.theme} onChange={(theme) => patch({ theme })} />
-              </Field>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Ribbon">
-                  <Input value={doc.poster.ribbon} onChange={(e) => setPoster({ ribbon: e.target.value })} placeholder="FOR WORKING PROFESSIONALS" className={fieldClass} />
-                </Field>
-                <Field label="Poster headline">
-                  <Input value={doc.poster.title} onChange={(e) => setPoster({ title: e.target.value })} placeholder={doc.title || "Defaults to the title"} className={fieldClass} />
-                </Field>
-                <Field label="Poster subtitle" className="md:col-span-2">
-                  <Input value={doc.poster.subtitle} onChange={(e) => setPoster({ subtitle: e.target.value })} placeholder={doc.tagline || "Defaults to the tagline"} className={fieldClass} />
-                </Field>
-                <Field label="Badge">
-                  <Input value={doc.poster.badgeText} onChange={(e) => setPoster({ badgeText: e.target.value })} placeholder={doc.mode.toUpperCase()} className={fieldClass} />
-                </Field>
-                <Field label="Badge caption">
-                  <Input value={doc.poster.badgeType} onChange={(e) => setPoster({ badgeType: e.target.value })} placeholder={doc.type || "Masterclass"} className={fieldClass} />
-                </Field>
-              </div>
-            </SectionCard>
-
-            <SectionCard title="What you'll build & take home" description="Press Enter to add the next one." icon={<CheckCheck className="size-5" />}>
-              <BulletListEditor
-                items={doc.takeaways}
-                onChange={(takeaways) => patch({ takeaways })}
-                placeholder="A working AI mini-project you built yourself"
-                addLabel="Add takeaway"
-              />
-            </SectionCard>
-
-            <SectionCard title="Session agenda & schedule" icon={<Clock3 className="size-5" />}>
-              <AgendaEditor slots={doc.agenda} onChange={(agenda) => patch({ agenda })} />
-            </SectionCard>
-
-            <div className="space-y-3">
-              <div className="px-1">
-                <h2 className="text-lg font-black tracking-tight text-gray-900">About this session</h2>
-                <p className="text-xs font-medium text-gray-500">The long description on the event page.</p>
-              </div>
-              <RichTextEditor
-                initialHtml={doc.aboutHtml}
-                onChange={(aboutHtml) => patch({ aboutHtml })}
-                folder="events"
-                minHeight="min-h-[220px]"
-                placeholder="What happens in the session, and why it's worth the time…"
-              />
+              </Section>
             </div>
-
-            <SectionCard title="Who is this session for?" icon={<ListChecks className="size-5" />}>
-              <BulletListEditor
-                items={doc.audience}
-                onChange={(audience) => patch({ audience })}
-                placeholder="Developers who want to ship real agentic workflows"
-                addLabel="Add audience"
-                bullet="•"
-              />
-            </SectionCard>
-
-            <SectionCard title="Instructor" description="Leave the name empty to hide the instructor sections." icon={<UserRound className="size-5" />}>
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <div className="shrink-0">
-                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-gray-500">Photo</div>
-                  <ImageInput
-                    value={doc.instructor.avatar}
-                    onChange={(avatar) => setInstructor({ avatar })}
-                    folder="events"
-                    siteUrl={siteUrl}
-                    compact
-                  />
-                </div>
-                <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-2">
-                  <Field label="Name">
-                    <Input value={doc.instructor.name} onChange={(e) => setInstructor({ name: e.target.value })} placeholder="Ankit Kumar" className={fieldClass} />
-                  </Field>
-                  <Field label="Role">
-                    <Input value={doc.instructor.role} onChange={(e) => setInstructor({ role: e.target.value })} placeholder="AI Engineer & Mentor" className={fieldClass} />
-                  </Field>
-                </div>
-              </div>
-              <Field label="Bio">
-                <Textarea
-                  value={doc.instructor.bio}
-                  onChange={(e) => setInstructor({ bio: e.target.value })}
-                  placeholder="A couple of sentences on their background."
-                  className={textareaClass}
+          }
+          rail={
+            <>
+              <RailSection title="Publishing">
+                <SlugField
+                  prefix="/events/"
+                  value={doc.slug}
+                  onChange={(value) => {
+                    setSlugTouched(true);
+                    patch({ slug: looseSlug(value) });
+                  }}
+                  warning={
+                    savedStatus === "Published" && event && doc.slug && doc.slug !== savedSlug
+                      ? "This event is live — changing its URL breaks existing links."
+                      : null
+                  }
                 />
-              </Field>
-              <Field label="Highlights" group hint="Short badges, e.g. “Ex-Tech Lead”. Press Enter after each.">
-                <ChipListEditor
-                  items={doc.instructor.highlights}
-                  onChange={(highlights) => setInstructor({ highlights })}
-                  placeholder="2,000+ Mentees"
+                <p className="text-xs leading-relaxed text-gray-400">
+                  Publishing needs a title, tagline, start date, time and location. Drafts can be saved any time.
+                </p>
+              </RailSection>
+
+              <RailSection title="Thumbnail">
+                <ImageInput
+                  value={doc.coverImage}
+                  onChange={(coverImage) => patch({ coverImage })}
+                  folder="events"
+                  siteUrl={siteUrl}
+                  emptyLabel="Optional — replaces the artwork"
                 />
-              </Field>
-            </SectionCard>
-          </div>
+              </RailSection>
 
-          <aside className="space-y-4">
-            <RailCard title="Publishing">
-              <SlugField
-                prefix="/events/"
-                value={doc.slug}
-                onChange={(value) => {
-                  setSlugTouched(true);
-                  patch({ slug: looseSlug(value) });
-                }}
-                warning={
-                  savedStatus === "Published" && event && doc.slug && doc.slug !== savedSlug
-                    ? "This event is live — changing its URL breaks existing links to it."
-                    : null
-                }
-              />
-              <p className="text-xs font-medium leading-relaxed text-gray-400">
-                Publishing needs a title, tagline, start date, time and location. Drafts can be saved at any point.
-              </p>
-            </RailCard>
+              <RailSection title="Registration card">
+                <Field label="Price label">
+                  <Input value={doc.priceLabel} onChange={(e) => patch({ priceLabel: e.target.value })} placeholder="100% Free" className={fieldClass} />
+                </Field>
+                <Field label="Certificate" hint="Leave empty to hide this row.">
+                  <Input value={doc.certificateLabel} onChange={(e) => patch({ certificateLabel: e.target.value })} placeholder="Included (Free)" className={fieldClass} />
+                </Field>
+              </RailSection>
 
-            <RailCard title="Thumbnail">
-              <ImageInput
-                value={doc.coverImage}
-                onChange={(coverImage) => patch({ coverImage })}
-                folder="events"
-                siteUrl={siteUrl}
-                emptyLabel="Optional — replaces the generated artwork"
-              />
-            </RailCard>
-
-            <RailCard title="Registration card">
-              <Field label="Price label">
-                <Input value={doc.priceLabel} onChange={(e) => patch({ priceLabel: e.target.value })} placeholder="100% Free" className={fieldClass} />
-              </Field>
-              <Field label="Certificate" hint="Leave empty to hide the row.">
-                <Input value={doc.certificateLabel} onChange={(e) => patch({ certificateLabel: e.target.value })} placeholder="Included (Free)" className={fieldClass} />
-              </Field>
-            </RailCard>
-
-            <RailCard title="SEO">
-              <SeoFields
-                metaTitle={doc.metaTitle || ""}
-                metaDescription={doc.metaDescription || ""}
-                onMetaTitle={(value) => patch({ metaTitle: value || null })}
-                onMetaDescription={(value) => patch({ metaDescription: value || null })}
-                fallbackTitle={doc.title ? `${doc.title} — UpperCurve Events` : ""}
-                fallbackDescription={doc.tagline}
-                url={`${siteHost} › events › ${doc.slug || "…"}`}
-              />
-            </RailCard>
-          </aside>
-        </div>
+              <RailSection title="Search engine">
+                <SeoFields
+                  metaTitle={doc.metaTitle || ""}
+                  metaDescription={doc.metaDescription || ""}
+                  onMetaTitle={(value) => patch({ metaTitle: value || null })}
+                  onMetaDescription={(value) => patch({ metaDescription: value || null })}
+                  fallbackTitle={doc.title ? `${doc.title} — UpperCurve Events` : ""}
+                  fallbackDescription={doc.tagline}
+                  url={`${siteHost} › events › ${doc.slug || "…"}`}
+                />
+              </RailSection>
+            </>
+          }
+        />
       )}
     </EditorShell>
   );

@@ -3,35 +3,46 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ExternalLink, Plus, Search, Trash2 } from "lucide-react";
+import { CalendarDays, Copy, ExternalLink, MoreHorizontal, PencilLine, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { isPastEvent, type EventItem } from "@/lib/content";
+import { button, surface } from "@/lib/ui";
+import { eventMonthDay, formatEventDateLabel, isPastEvent, type EventItem } from "@/lib/content";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { EmptyState, Page } from "@/components/Page";
 import { contentApi } from "../api";
 import { ConfirmDelete } from "../ConfirmDelete";
+import { FilterTabs, SearchInput, StatusLabel, ViewToggle, type ViewMode } from "../ListToolbar";
 import { EventCard } from "../site/EventSite";
 
-type Filter = "All" | "Upcoming" | "Past" | "Drafts";
+type Filter = "all" | "Upcoming" | "Past" | "Draft";
 
-function matches(event: EventItem, filter: Filter) {
-  if (filter === "All") return true;
-  if (filter === "Drafts") return event.status !== "Published";
-  if (event.status !== "Published") return false;
-  return filter === "Past" ? isPastEvent(event) : !isPastEvent(event);
+function statusOf(event: EventItem): Exclude<Filter, "all"> {
+  if (event.status !== "Published") return "Draft";
+  return isPastEvent(event) ? "Past" : "Upcoming";
 }
 
 export function EventsBoard({ events, basePath, siteUrl }: { events: EventItem[]; basePath: string; siteUrl: string }) {
   const router = useRouter();
-  const [filter, setFilter] = useState<Filter>("All");
+  const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
+  const [view, setView] = useState<ViewMode>("list");
   const [pendingDelete, setPendingDelete] = useState<EventItem | null>(null);
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return events
-      .filter((e) => matches(e, filter))
+      .filter((e) => filter === "all" || statusOf(e) === filter)
       .filter((e) => !q || `${e.title} ${e.tagline} ${e.type} ${e.location} ${e.instructor.name}`.toLowerCase().includes(q));
   }, [events, filter, query]);
+
+  const count = (f: Filter) => (f === "all" ? events.length : events.filter((e) => statusOf(e) === f).length);
 
   async function handleDelete(event: EventItem) {
     try {
@@ -43,143 +54,150 @@ export function EventsBoard({ events, basePath, siteUrl }: { events: EventItem[]
     }
   }
 
-  return (
-    <div className="mx-auto max-w-7xl font-sans">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
-        <div>
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-1 py-1 pr-3 shadow-sm">
-            <span className="rounded-full bg-[#0066FF] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white">Events</span>
-            <span className="text-sm font-[450] text-blue-950">Workshops, masterclasses & meetups</span>
-          </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Events & Masterclasses</h1>
-          <div className="mt-2.5 h-1 w-20 rounded-full bg-[#0066FF]" />
-        </div>
-        <Link
-          href={`${basePath}/new`}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#0070F3] px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#005FE0] hover:shadow-md active:scale-95"
-        >
-          <Plus className="size-4" /> New event
-        </Link>
-      </div>
+  function copyLink(event: EventItem) {
+    navigator.clipboard.writeText(`${siteUrl}/events/${event.slug}`).then(
+      () => toast.success("Link copied"),
+      () => toast.error("Couldn't copy the link")
+    );
+  }
 
+  const newEvent = (
+    <Link href={`${basePath}/new`} className={button.primary}>
+      <Plus /> New event
+    </Link>
+  );
+
+  return (
+    <Page title="Events" description="Workshops, masterclasses and meetups on the UpperCurve website." actions={events.length > 0 && newEvent}>
       {events.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50/60 px-6 py-20 text-center">
-          <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">No events yet</h2>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-gray-500">Create a workshop or masterclass and publish it to the events page.</p>
-          <Link href={`${basePath}/new`} className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#0070F3] px-5 py-2.5 text-sm font-bold text-white hover:bg-[#005FE0]">
-            <Plus className="size-4" /> Create an event
-          </Link>
-        </div>
+        <EmptyState
+          icon={<CalendarDays />}
+          title="No events yet"
+          description="Create a workshop or masterclass and publish it to the events page."
+          action={newEvent}
+        />
       ) : (
         <>
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-              {(["All", "Upcoming", "Past", "Drafts"] as Filter[]).map((f) => (
-                <button
-                  key={f}
-                  type="button"
-                  onClick={() => setFilter(f)}
-                  className={cn(
-                    "inline-flex items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all",
-                    filter === f ? "bg-[#0066FF] text-white shadow-sm" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  )}
-                >
-                  {f === "All" ? "All Events" : f}
-                  <span className={cn("rounded-full px-1.5 text-[10px] font-bold", filter === f ? "bg-white/20" : "bg-white text-gray-500")}>
-                    {events.filter((e) => matches(e, f)).length}
-                  </span>
-                </button>
-              ))}
-            </div>
-            <div className="relative w-full max-w-xs">
-              <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search events"
-                className="w-full rounded-full border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm font-medium text-gray-900 outline-none transition-all placeholder:text-gray-400 focus:border-[#0066FF] focus:ring-3 focus:ring-blue-100"
-              />
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-b border-gray-100">
+            <FilterTabs
+              value={filter}
+              onChange={setFilter}
+              options={[
+                { value: "all", label: "All", count: count("all") },
+                { value: "Upcoming", label: "Upcoming", count: count("Upcoming") },
+                { value: "Past", label: "Past", count: count("Past") },
+                { value: "Draft", label: "Drafts", count: count("Draft") },
+              ]}
+            />
+            <div className="flex items-center gap-2 pb-2">
+              <SearchInput value={query} onChange={setQuery} placeholder="Search events" />
+              <ViewToggle value={view} onChange={setView} />
             </div>
           </div>
 
           {visible.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-gray-200 px-6 py-16 text-center text-sm font-medium text-gray-500">
-              No events match these filters.
+            <p className="py-16 text-center text-sm text-gray-500">No events match these filters.</p>
+          ) : view === "gallery" ? (
+            <div className="uc-site space-y-6">
+              {visible.map((event) => (
+                <div key={event.id} className="relative">
+                  <EventCard
+                    event={event}
+                    siteUrl={siteUrl}
+                    titleSlot={
+                      <Link href={`${basePath}/${event.id}`} className="after:absolute after:inset-0 after:z-30 after:rounded-2xl">
+                        {event.title}
+                      </Link>
+                    }
+                    status={<StatusLabel status={statusOf(event)} />}
+                    actions={
+                      <>
+                        <span className="text-xs text-gray-400">
+                          Edited {new Date(event.updatedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                        </span>
+                        <span className={cn(button.secondary, "h-8")}>Edit event</span>
+                      </>
+                    }
+                  />
+                </div>
+              ))}
             </div>
           ) : (
-            <div className="uc-site space-y-6">
-              {visible.map((event) => {
-                const published = event.status === "Published";
-                const past = isPastEvent(event);
-                const href = `${basePath}/${event.id}`;
-                return (
-                  <div key={event.id} className="relative">
-                    <EventCard
-                      event={event}
-                      siteUrl={siteUrl}
-                      titleSlot={
-                        <Link href={href} className="after:absolute after:inset-0 after:z-30 after:rounded-2xl">
-                          {event.title}
-                        </Link>
-                      }
-                      status={
-                        <span
+            <div className={surface}>
+              <div className="hidden grid-cols-[minmax(0,1fr)_160px_110px_40px] items-center gap-4 border-b border-gray-100 px-4 py-2.5 text-xs text-gray-400 md:grid">
+                <span>Event</span>
+                <span>When</span>
+                <span>Status</span>
+                <span />
+              </div>
+              <ul className="divide-y divide-gray-100">
+                {visible.map((event) => {
+                  const s = statusOf(event);
+                  const { month, day } = eventMonthDay(event.startDate);
+                  const href = `${basePath}/${event.id}`;
+                  return (
+                    <li
+                      key={event.id}
+                      className="group relative grid grid-cols-[minmax(0,1fr)_40px] items-center gap-4 px-4 py-3 transition-colors hover:bg-gray-50/70 md:grid-cols-[minmax(0,1fr)_160px_110px_40px]"
+                    >
+                      <div className="flex min-w-0 items-center gap-3.5">
+                        <div
                           className={cn(
-                            "inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold",
-                            !published
-                              ? "border-amber-200/60 bg-amber-50 text-amber-700"
-                              : past
-                                ? "border-gray-200 bg-gray-50 text-gray-500"
-                                : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                            "flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-lg bg-white ring-1 ring-gray-200/80",
+                            s === "Past" && "opacity-60"
                           )}
                         >
-                          {!published ? "Draft" : past ? "Past event" : "Live on site"}
-                        </span>
-                      }
-                      actions={
-                        <>
-                          <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
-                            <span
-                              className={cn(
-                                "inline-block h-2 w-2 rounded-full",
-                                !published ? "bg-amber-400" : past ? "bg-gray-300" : "bg-emerald-500 animate-pulse"
-                              )}
-                            />
-                            <span>Edited {new Date(event.updatedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                          <span className="text-[9px] font-semibold uppercase leading-none tracking-wider text-indigo-600">{month || "TBC"}</span>
+                          <span className="mt-0.5 text-base font-semibold leading-none text-gray-900 tabular-nums">{day || "—"}</span>
+                        </div>
+                        <div className="min-w-0">
+                          <Link href={href} className="block truncate text-[13px] font-medium text-gray-900 after:absolute after:inset-0">
+                            {event.title || "Untitled"}
+                          </Link>
+                          <div className="truncate text-xs text-gray-500">
+                            {[event.type, event.location || event.mode, event.instructor.name].filter(Boolean).join(" · ")}
                           </div>
-                          <div className="relative z-40 flex items-center gap-1.5">
-                            {published && (
-                              <a
-                                href={`${siteUrl}/events/${event.slug}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="rounded-lg p-2.5 text-gray-500 transition hover:bg-gray-100 hover:text-[#0066FF]"
-                                title="View on website"
-                              >
-                                <ExternalLink className="size-4" />
-                              </a>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => setPendingDelete(event)}
-                              className="rounded-lg p-2.5 text-gray-500 transition hover:bg-rose-50 hover:text-rose-600"
-                              title="Delete event"
-                            >
-                              <Trash2 className="size-4" />
+                        </div>
+                      </div>
+                      <div className="hidden min-w-0 md:block">
+                        <div className="truncate text-xs text-gray-700">{formatEventDateLabel(event.startDate, event.endDate) || "Date TBC"}</div>
+                        <div className="truncate text-xs text-gray-400">{event.timeLabel || "Time TBC"}</div>
+                      </div>
+                      <StatusLabel status={s} className="hidden md:inline-flex" />
+                      <div className="relative z-10 flex justify-end">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button type="button" className={cn(button.icon, "data-[state=open]:bg-gray-100 data-[state=open]:text-gray-900")} aria-label={`Actions for ${event.title}`}>
+                              <MoreHorizontal />
                             </button>
-                            <Link
-                              href={href}
-                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#0070F3] px-6 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#005FE0] hover:shadow-md active:scale-95 sm:text-sm"
-                            >
-                              Edit event <span aria-hidden>→</span>
-                            </Link>
-                          </div>
-                        </>
-                      }
-                    />
-                  </div>
-                );
-              })}
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48 rounded-xl p-1.5">
+                            <DropdownMenuItem asChild className="rounded-lg text-[13px]">
+                              <Link href={href}>
+                                <PencilLine /> Edit
+                              </Link>
+                            </DropdownMenuItem>
+                            {event.status === "Published" && (
+                              <DropdownMenuItem asChild className="rounded-lg text-[13px]">
+                                <a href={`${siteUrl}/events/${event.slug}`} target="_blank" rel="noreferrer">
+                                  <ExternalLink /> View on website
+                                </a>
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem className="rounded-lg text-[13px]" onSelect={() => copyLink(event)}>
+                              <Copy /> Copy link
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem variant="destructive" className="rounded-lg text-[13px]" onSelect={() => setPendingDelete(event)}>
+                              <Trash2 /> Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           )}
         </>
@@ -193,6 +211,6 @@ export function EventsBoard({ events, basePath, siteUrl }: { events: EventItem[]
         published={pendingDelete?.status === "Published"}
         onConfirm={() => pendingDelete && handleDelete(pendingDelete)}
       />
-    </div>
+    </Page>
   );
 }

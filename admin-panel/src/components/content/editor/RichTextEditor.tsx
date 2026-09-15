@@ -19,8 +19,10 @@ import {
   TbBlockquote,
   TbBold,
   TbBrandYoutube,
+  TbCheck,
   TbClearFormatting,
   TbCode,
+  TbDots,
   TbColumnInsertRight,
   TbColumnRemove,
   TbHighlight,
@@ -53,6 +55,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -133,8 +136,8 @@ function ToolbarButton({
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
       className={cn(
-        "rounded-lg p-1.5 transition-colors",
-        active ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+        "flex size-7 items-center justify-center rounded-md transition-colors",
+        active ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-100 hover:text-gray-900"
       )}
     >
       {children}
@@ -143,13 +146,13 @@ function ToolbarButton({
 }
 
 function Divider() {
-  return <span className="mx-1 h-4 w-px shrink-0 bg-gray-200" />;
+  return <span className="mx-1 h-4 w-px shrink-0 bg-gray-100" />;
 }
 
 const popoverInput =
-  "h-8 min-w-0 flex-1 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs text-gray-900 outline-none focus:border-[#0066FF] focus:bg-white";
+  "h-8 min-w-0 flex-1 rounded-lg border border-gray-200 bg-white px-2.5 text-xs text-gray-900 outline-none focus:border-gray-300 focus:ring-[3px] focus:ring-indigo-500/15";
 const popoverSubmit =
-  "h-8 rounded-lg bg-gray-900 px-3 text-xs font-bold text-white hover:bg-gray-800 disabled:opacity-50";
+  "h-8 rounded-full bg-gray-900 px-3 text-xs font-medium text-white hover:bg-gray-800 disabled:opacity-50";
 
 function PopoverToolButton({
   title,
@@ -175,15 +178,14 @@ function PopoverToolButton({
           aria-label={title}
           onMouseDown={(e) => e.preventDefault()}
           className={cn(
-            "rounded-lg p-1.5 transition-colors",
-            active ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900",
-            open && !active && "bg-gray-100 text-gray-900"
+            "flex size-7 items-center justify-center rounded-md transition-colors",
+            active || open ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-100 hover:text-gray-900"
           )}
         >
           {icon}
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-80 rounded-2xl p-3">
+      <PopoverContent align="start" sideOffset={6} className="w-80 rounded-xl border-gray-200/70 p-3 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.18)]">
         {children}
       </PopoverContent>
     </Popover>
@@ -222,7 +224,7 @@ function LinkButton({ editor }: { editor: Editor }) {
       onOpenChange={handleOpen}
     >
       <form onSubmit={apply} className="space-y-2.5">
-        <h4 className="text-xs font-bold text-gray-900">Link</h4>
+        <h4 className="text-xs font-semibold text-gray-900">Link</h4>
         <div className="flex gap-1.5">
           <input
             autoFocus
@@ -277,12 +279,12 @@ function InsertImageButton({ editor, folder }: { editor: Editor; folder: "blogs"
   return (
     <PopoverToolButton title="Insert image" icon={<TbPhoto size={16} />} open={open} onOpenChange={setOpen}>
       <div className="space-y-2.5">
-        <h4 className="text-xs font-bold text-gray-900">Insert image</h4>
+        <h4 className="text-xs font-semibold text-gray-900">Insert image</h4>
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-gray-200 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 text-[13px] font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
         >
           {uploading ? <TbLoader size={15} className="animate-spin" /> : <TbUpload size={15} />}
           {uploading ? "Uploading…" : "Upload from computer"}
@@ -290,7 +292,7 @@ function InsertImageButton({ editor, folder }: { editor: Editor; folder: "blogs"
         <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
         <div className="relative flex items-center py-1">
           <span className="absolute inset-x-0 h-px bg-gray-100" />
-          <span className="relative mx-auto bg-white px-2 text-[10px] font-bold text-gray-400">OR</span>
+          <span className="relative mx-auto bg-white px-2 text-[10px] font-medium text-gray-400">OR</span>
         </div>
         <form onSubmit={handleUrl} className="flex gap-1.5">
           <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Paste image URL…" className={popoverInput} />
@@ -320,7 +322,7 @@ function InsertVideoButton({ editor }: { editor: Editor }) {
   return (
     <PopoverToolButton title="Embed video" icon={<TbVideo size={16} />} open={open} onOpenChange={setOpen}>
       <form onSubmit={handleUrl} className="space-y-2.5">
-        <h4 className="text-xs font-bold text-gray-900">Embed video</h4>
+        <h4 className="text-xs font-semibold text-gray-900">Embed video</h4>
         <div className="flex gap-1.5">
           <input
             autoFocus
@@ -333,7 +335,7 @@ function InsertVideoButton({ editor }: { editor: Editor }) {
             Embed
           </button>
         </div>
-        <p className="flex items-center gap-1 text-[11px] font-medium text-gray-400">
+        <p className="flex items-center gap-1 text-[11px] text-gray-400">
           <TbBrandYoutube size={13} /> YouTube links embed in privacy mode.
         </p>
       </form>
@@ -363,19 +365,57 @@ function ColorMenu({
           aria-label={title}
           onMouseDown={(e) => e.preventDefault()}
           className={cn(
-            "rounded-lg p-1.5 transition-colors",
-            active ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+            "flex size-7 items-center justify-center rounded-md transition-colors",
+            active ? "bg-gray-100 text-gray-900" : "text-gray-400 hover:bg-gray-100 hover:text-gray-900"
           )}
         >
           {icon}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-[140px]">
+      <DropdownMenuContent align="start" className="min-w-[140px] rounded-xl p-1.5">
         {colors.map((c) => (
           <DropdownMenuItem key={c.label} onSelect={() => onPick(c.value)} className="gap-2.5">
             <span className="h-3.5 w-3.5 rounded-full border border-gray-200" style={{ background: c.value || "#ffffff" }} />
             {c.label}
           </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function IconMenu({
+  title,
+  icon,
+  items,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  items: { label: string; icon: React.ReactNode; active?: boolean; separated?: boolean; onSelect: () => void }[];
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          title={title}
+          aria-label={title}
+          onMouseDown={(e) => e.preventDefault()}
+          className="flex size-7 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900 data-[state=open]:bg-gray-100 data-[state=open]:text-gray-900"
+        >
+          {icon}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="min-w-44 rounded-xl p-1.5">
+        {items.map((item) => (
+          <div key={item.label}>
+            {item.separated && <DropdownMenuSeparator />}
+            <DropdownMenuItem onSelect={item.onSelect} className="gap-2.5 rounded-lg text-[13px]">
+              <span className="text-gray-400 [&_svg]:size-4">{item.icon}</span>
+              <span className="flex-1">{item.label}</span>
+              {item.active && <TbCheck className="size-3.5! text-gray-900!" />}
+            </DropdownMenuItem>
+          </div>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -388,7 +428,7 @@ export function RichTextEditor({
   placeholder = "Start writing…",
   folder,
   minHeight = "min-h-[50vh]",
-  toolbarOffset = "top-10 md:top-8",
+  toolbarOffset = "top-14",
 }: {
   /** Read once on mount; the editor owns the document afterwards. */
   initialHtml: string;
@@ -396,7 +436,7 @@ export function RichTextEditor({
   placeholder?: string;
   folder: "blogs" | "events";
   minHeight?: string;
-  /** Sticky offset for the toolbar: just below the EditorShell header (h-16 minus <main>'s padding). */
+  /** Sticky offset for the toolbar: just below the EditorShell bar (h-14). */
   toolbarOffset?: string;
 }) {
   const editor = useEditor({
@@ -420,7 +460,7 @@ export function RichTextEditor({
     ],
     content: initialHtml || "",
     editorProps: {
-      attributes: { class: cn("uc-article px-6 py-6 sm:px-10 sm:py-8", minHeight) },
+      attributes: { class: cn("uc-article py-6", minHeight) },
     },
     onUpdate: ({ editor }) => {
       onChange(editor.isEmpty ? "" : editor.getHTML());
@@ -428,7 +468,7 @@ export function RichTextEditor({
   });
 
   if (!editor) {
-    return <div className={cn("rounded-3xl border border-gray-200/80 bg-gray-50 animate-pulse", minHeight)} />;
+    return <div className={cn("rounded-lg bg-gray-50 animate-pulse", minHeight)} />;
   }
 
   const styleValue = editor.isActive("heading", { level: 2 })
@@ -439,19 +479,26 @@ export function RichTextEditor({
         ? "h4"
         : "p";
   const inTable = editor.isActive("table");
+  const AlignIcon = editor.isActive({ textAlign: "center" })
+    ? TbAlignCenter
+    : editor.isActive({ textAlign: "right" })
+      ? TbAlignRight
+      : editor.isActive({ textAlign: "justify" })
+        ? TbAlignJustified
+        : TbAlignLeft;
   const imageAttrs = editor.getAttributes("image");
   const videoAttrs = editor.getAttributes("videoEmbed");
 
   const sizeButton = (active: boolean) =>
     cn(
-      "rounded-md border px-2 py-0.5 text-[11px] font-bold transition-all",
-      active ? "border-gray-900 bg-gray-900 text-white" : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+      "rounded-md px-2 py-0.5 text-[11px] font-medium transition-all",
+      active ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
     );
 
   return (
-    <div className="rounded-3xl border border-gray-200/80 bg-white shadow-sm">
-      <div className={cn("sticky z-20 rounded-t-3xl border-b border-gray-100 bg-white/95 backdrop-blur", toolbarOffset)}>
-        <div className="flex flex-wrap items-center gap-0.5 px-3 py-2">
+    <div>
+      <div className={cn("sticky z-20 -mx-2 border-b border-gray-100 bg-white/90 backdrop-blur-md", toolbarOffset)}>
+        <div className="flex flex-wrap items-center gap-0.5 px-1 py-1.5">
           <select
             title="Paragraph style"
             value={styleValue}
@@ -461,7 +508,7 @@ export function RichTextEditor({
               if (v === "p") chain.setParagraph().run();
               else chain.toggleHeading({ level: Number(v.slice(1)) as 2 | 3 | 4 }).run();
             }}
-            className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-2 text-xs font-bold text-gray-700 outline-none focus:border-[#0066FF]"
+            className="h-7 rounded-md border-0 bg-transparent px-1.5 text-xs font-medium text-gray-600 outline-none hover:bg-gray-100 focus:ring-[3px] focus:ring-indigo-500/15"
           >
             <option value="p">Paragraph</option>
             <option value="h2">Heading (in contents)</option>
@@ -505,13 +552,6 @@ export function RichTextEditor({
                 : editor.chain().focus().unsetHighlight().run()
             }
           />
-          <ToolbarButton title="Subscript" active={editor.isActive("subscript")} onClick={() => editor.chain().focus().toggleSubscript().run()}>
-            <TbSubscript size={16} />
-          </ToolbarButton>
-          <ToolbarButton title="Superscript" active={editor.isActive("superscript")} onClick={() => editor.chain().focus().toggleSuperscript().run()}>
-            <TbSuperscript size={16} />
-          </ToolbarButton>
-
           <Divider />
 
           <ToolbarButton title="Checklist (bullets)" active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}>
@@ -520,27 +560,16 @@ export function RichTextEditor({
           <ToolbarButton title="Numbered list" active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}>
             <TbListNumbers size={16} />
           </ToolbarButton>
-          <ToolbarButton title="Decrease indent" onClick={() => editor.chain().focus().liftListItem("listItem").run()}>
-            <TbIndentDecrease size={16} />
-          </ToolbarButton>
-          <ToolbarButton title="Increase indent" onClick={() => editor.chain().focus().sinkListItem("listItem").run()}>
-            <TbIndentIncrease size={16} />
-          </ToolbarButton>
-
-          <Divider />
-
-          <ToolbarButton title="Align left" active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}>
-            <TbAlignLeft size={16} />
-          </ToolbarButton>
-          <ToolbarButton title="Align centre" active={editor.isActive({ textAlign: "center" })} onClick={() => editor.chain().focus().setTextAlign("center").run()}>
-            <TbAlignCenter size={16} />
-          </ToolbarButton>
-          <ToolbarButton title="Align right" active={editor.isActive({ textAlign: "right" })} onClick={() => editor.chain().focus().setTextAlign("right").run()}>
-            <TbAlignRight size={16} />
-          </ToolbarButton>
-          <ToolbarButton title="Justify" active={editor.isActive({ textAlign: "justify" })} onClick={() => editor.chain().focus().setTextAlign("justify").run()}>
-            <TbAlignJustified size={16} />
-          </ToolbarButton>
+          <IconMenu
+            title="Alignment"
+            icon={<AlignIcon size={16} />}
+            items={[
+              { label: "Align left", icon: <TbAlignLeft />, active: editor.isActive({ textAlign: "left" }), onSelect: () => editor.chain().focus().setTextAlign("left").run() },
+              { label: "Align centre", icon: <TbAlignCenter />, active: editor.isActive({ textAlign: "center" }), onSelect: () => editor.chain().focus().setTextAlign("center").run() },
+              { label: "Align right", icon: <TbAlignRight />, active: editor.isActive({ textAlign: "right" }), onSelect: () => editor.chain().focus().setTextAlign("right").run() },
+              { label: "Justify", icon: <TbAlignJustified />, active: editor.isActive({ textAlign: "justify" }), onSelect: () => editor.chain().focus().setTextAlign("justify").run() },
+            ]}
+          />
 
           <Divider />
 
@@ -549,9 +578,6 @@ export function RichTextEditor({
           </ToolbarButton>
           <ToolbarButton title="Inline code" active={editor.isActive("code")} onClick={() => editor.chain().focus().toggleCode().run()}>
             <TbCode size={16} />
-          </ToolbarButton>
-          <ToolbarButton title="Code block" active={editor.isActive("codeBlock")} onClick={() => editor.chain().focus().toggleCodeBlock().run()}>
-            <TbSourceCode size={16} />
           </ToolbarButton>
 
           <Divider />
@@ -574,14 +600,24 @@ export function RichTextEditor({
 
           <Divider />
 
-          <ToolbarButton title="Clear formatting" onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}>
-            <TbClearFormatting size={16} />
-          </ToolbarButton>
+          {/* Less-used tools stay one click away so the bar fits on one row. */}
+          <IconMenu
+            title="More formatting"
+            icon={<TbDots size={16} />}
+            items={[
+              { label: "Subscript", icon: <TbSubscript />, active: editor.isActive("subscript"), onSelect: () => editor.chain().focus().toggleSubscript().run() },
+              { label: "Superscript", icon: <TbSuperscript />, active: editor.isActive("superscript"), onSelect: () => editor.chain().focus().toggleSuperscript().run() },
+              { label: "Code block", icon: <TbSourceCode />, active: editor.isActive("codeBlock"), onSelect: () => editor.chain().focus().toggleCodeBlock().run() },
+              { label: "Increase indent", icon: <TbIndentIncrease />, onSelect: () => editor.chain().focus().sinkListItem("listItem").run() },
+              { label: "Decrease indent", icon: <TbIndentDecrease />, onSelect: () => editor.chain().focus().liftListItem("listItem").run() },
+              { label: "Clear formatting", icon: <TbClearFormatting />, separated: true, onSelect: () => editor.chain().focus().unsetAllMarks().clearNodes().run() },
+            ]}
+          />
         </div>
 
         {inTable && (
-          <div className="flex flex-wrap items-center gap-0.5 border-t border-gray-100 bg-gray-50/80 px-3 py-1">
-            <span className="mr-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">Table</span>
+          <div className="flex flex-wrap items-center gap-0.5 border-t border-gray-100 px-1 py-1">
+            <span className="mr-1 px-1 text-[11px] font-medium text-gray-400">Table</span>
             <ToolbarButton title="Add row below" onClick={() => editor.chain().focus().addRowAfter().run()}>
               <TbRowInsertBottom size={15} />
             </ToolbarButton>
@@ -601,8 +637,8 @@ export function RichTextEditor({
         )}
 
         {editor.isActive("image") && (
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-gray-100 bg-gray-50/80 px-3 py-1.5">
-            <span className="mr-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">Image</span>
+          <div className="flex flex-wrap items-center gap-1 border-t border-gray-100 px-1 py-1">
+            <span className="mr-1 px-1 text-[11px] font-medium text-gray-400">Image</span>
             <ToolbarButton title="Align left" active={imageAttrs.align === "left"} onClick={() => editor.chain().focus().updateAttributes("image", { align: "left" }).run()}>
               <TbAlignLeft size={15} />
             </ToolbarButton>
@@ -629,12 +665,12 @@ export function RichTextEditor({
               placeholder="Alt text (describe the image)"
               value={(imageAttrs.alt as string) || ""}
               onChange={(e) => editor.chain().updateAttributes("image", { alt: e.target.value }).run()}
-              className="h-7 min-w-[200px] flex-1 rounded-lg border border-gray-200 bg-white px-2 text-[11px] text-gray-900 outline-none focus:border-[#0066FF]"
+              className="h-7 min-w-[200px] flex-1 rounded-md border border-gray-200 bg-white px-2 text-xs text-gray-900 outline-none focus:border-gray-300"
             />
             <button
               type="button"
               onClick={() => editor.chain().focus().deleteSelection().run()}
-              className="rounded-lg p-1 text-rose-500 hover:bg-rose-50 hover:text-rose-700"
+              className="flex size-7 items-center justify-center rounded-md text-gray-400 hover:bg-rose-50 hover:text-rose-600"
               title="Delete image"
             >
               <TbTrash size={15} />
@@ -643,8 +679,8 @@ export function RichTextEditor({
         )}
 
         {editor.isActive("videoEmbed") && (
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-gray-100 bg-gray-50/80 px-3 py-1.5">
-            <span className="mr-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+          <div className="flex flex-wrap items-center gap-1 border-t border-gray-100 px-1 py-1">
+            <span className="mr-1 px-1 text-[11px] font-medium text-gray-400">
               {videoAttrs.kind === "youtube" ? "YouTube" : "Video"}
             </span>
             {(["50%", "75%", "100%"] as const).map((size) => (
@@ -660,7 +696,7 @@ export function RichTextEditor({
             <button
               type="button"
               onClick={() => editor.chain().focus().deleteSelection().run()}
-              className="rounded-lg p-1 text-rose-500 hover:bg-rose-50 hover:text-rose-700"
+              className="flex size-7 items-center justify-center rounded-md text-gray-400 hover:bg-rose-50 hover:text-rose-600"
               title="Delete video"
             >
               <TbTrash size={15} />

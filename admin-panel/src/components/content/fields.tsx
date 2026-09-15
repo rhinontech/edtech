@@ -13,42 +13,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-// Inputs take the landing site's form look (SaveSeatForm): soft gray fill,
-// rounded-xl, blue focus ring.
+// Quiet form controls: white fill, hairline border, soft indigo focus ring.
 export const fieldClass =
-  "h-11 rounded-xl border-gray-200 bg-gray-50 px-4 text-sm font-medium text-gray-900 shadow-none placeholder:text-gray-400 focus-visible:border-[#0066FF] focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-blue-100";
+  "h-9 rounded-lg border-gray-200 bg-white px-3 text-sm text-gray-900 shadow-none placeholder:text-gray-400 focus-visible:border-gray-300 focus-visible:ring-[3px] focus-visible:ring-indigo-500/15";
 
 export const textareaClass =
-  "min-h-24 rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-900 shadow-none placeholder:text-gray-400 focus-visible:border-[#0066FF] focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-blue-100";
+  "min-h-20 rounded-lg border-gray-200 bg-white px-3 py-2 text-sm leading-relaxed text-gray-900 shadow-none placeholder:text-gray-400 focus-visible:border-gray-300 focus-visible:ring-[3px] focus-visible:ring-indigo-500/15";
 
-export function SectionCard({
+/** A titled block in the main editing column, separated by a hairline. */
+export function Section({
   title,
   description,
-  icon,
   action,
   children,
   className,
 }: {
   title: string;
   description?: string;
-  icon?: React.ReactNode;
   action?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
-    <section className={cn("rounded-3xl border border-gray-200/80 bg-white p-6 shadow-sm", className)}>
-      <div className="mb-5 flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          {icon && (
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0066FF]">
-              {icon}
-            </div>
-          )}
-          <div>
-            <h2 className="text-lg font-black tracking-tight text-gray-900">{title}</h2>
-            {description && <p className="text-xs font-medium text-gray-500">{description}</p>}
-          </div>
+    <section className={cn("border-t border-gray-100 pt-8 first:border-t-0 first:pt-0", className)}>
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-sm font-semibold text-gray-900">{title}</h2>
+          {description && <p className="mt-0.5 text-[13px] text-gray-500">{description}</p>}
         </div>
         {action}
       </div>
@@ -57,11 +48,12 @@ export function SectionCard({
   );
 }
 
-export function RailCard({ title, children }: { title: string; children: React.ReactNode }) {
+/** A group in the settings panel. */
+export function RailSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="space-y-4 rounded-3xl border border-gray-200/80 bg-white p-5 shadow-sm">
-      <h2 className="text-[11px] font-bold uppercase tracking-widest text-gray-400">{title}</h2>
-      {children}
+    <section className="border-b border-gray-100 px-5 py-5 last:border-b-0">
+      <h3 className="mb-4 text-xs font-semibold text-gray-900">{title}</h3>
+      <div className="space-y-4">{children}</div>
     </section>
   );
 }
@@ -85,24 +77,19 @@ export function Field({
   const Wrapper = group ? "div" : "label";
   return (
     <Wrapper className={cn("block", className)}>
-      <span className="mb-1.5 flex items-center justify-between gap-2">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{label}</span>
+      <span className="mb-1.5 flex min-h-4 items-center justify-between gap-2">
+        <span className="text-xs font-medium text-gray-500">{label}</span>
         {aside}
       </span>
       {children}
-      {hint && <span className="mt-1.5 block text-xs font-medium text-gray-400">{hint}</span>}
+      {hint && <span className="mt-1.5 block text-xs leading-relaxed text-gray-400">{hint}</span>}
     </Wrapper>
   );
 }
 
 export function CharCount({ value, limit }: { value: string; limit: number }) {
   return (
-    <span
-      className={cn(
-        "text-[10px] font-bold tabular-nums",
-        value.length > limit ? "text-amber-600" : "text-gray-400"
-      )}
-    >
+    <span className={cn("text-[11px] tabular-nums", value.length > limit ? "text-amber-600" : "text-gray-400")}>
       {value.length}/{limit}
     </span>
   );
@@ -121,13 +108,13 @@ export function SlugField({
 }) {
   return (
     <Field label="URL" hint={warning ? <span className="text-amber-600">{warning}</span> : undefined}>
-      <div className="flex h-11 items-center overflow-hidden rounded-xl border border-gray-200 bg-gray-50 focus-within:border-[#0066FF] focus-within:bg-white focus-within:ring-3 focus-within:ring-blue-100">
-        <span className="shrink-0 pl-4 text-sm font-medium text-gray-400">{prefix}</span>
+      <div className="flex h-9 items-center overflow-hidden rounded-lg border border-gray-200 bg-white transition focus-within:border-gray-300 focus-within:ring-[3px] focus-within:ring-indigo-500/15">
+        <span className="shrink-0 pl-3 text-sm text-gray-400">{prefix}</span>
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="auto-from-title"
-          className="h-full w-full min-w-0 bg-transparent pr-4 text-sm font-semibold text-gray-900 outline-none placeholder:font-medium placeholder:text-gray-400"
+          className="h-full w-full min-w-0 bg-transparent pr-3 text-sm text-gray-900 outline-none placeholder:text-gray-400"
         />
       </div>
     </Field>
@@ -148,12 +135,12 @@ export function ThemePicker({ value, onChange }: { value: ThemeKey; onChange: (t
             aria-label={`${THEMES[key].label} theme`}
             aria-pressed={active}
             className={cn(
-              "relative h-9 w-9 overflow-hidden rounded-full border-2 transition-all",
+              "relative size-6 rounded-full transition-all",
               THEMES[key].gradient,
-              active ? "scale-110 border-gray-900 shadow-md" : "border-white shadow-sm ring-1 ring-gray-200 hover:scale-105"
+              active ? "ring-2 ring-gray-900 ring-offset-2" : "ring-1 ring-black/5 hover:scale-110"
             )}
           >
-            {active && <Check className="absolute inset-0 m-auto size-4 text-white" strokeWidth={3} />}
+            {active && <Check className="absolute inset-0 m-auto size-3 text-white" strokeWidth={3} />}
           </button>
         );
       })}
@@ -171,15 +158,16 @@ export function SegmentedControl<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div className="inline-flex rounded-full bg-gray-100 p-1">
+    <div className="inline-flex h-9 rounded-lg bg-gray-100 p-0.5">
       {options.map((option) => (
         <button
           key={option}
           type="button"
           onClick={() => onChange(option)}
+          aria-pressed={value === option}
           className={cn(
-            "rounded-full px-4 py-1.5 text-xs font-bold transition-all",
-            value === option ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+            "rounded-md px-3 text-[13px] font-medium transition-all",
+            value === option ? "bg-white text-gray-900 shadow-[0_1px_2px_rgba(0,0,0,0.08)]" : "text-gray-500 hover:text-gray-900"
           )}
         >
           {option}
@@ -212,6 +200,20 @@ export function SeoFields({
 
   return (
     <>
+      <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-3">
+        <div className="flex items-center gap-2">
+          <span className="flex size-5 items-center justify-center rounded-full bg-white ring-1 ring-gray-200">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/uppercurve_logo_nav.png" alt="" className="size-3 object-contain" />
+          </span>
+          <div className="min-w-0 leading-tight">
+            <div className="text-[11px] text-gray-700">UpperCurve</div>
+            <div className="truncate text-[10px] text-gray-400">{url}</div>
+          </div>
+        </div>
+        <div className="mt-2 line-clamp-1 text-[15px] leading-snug text-[#1a0dab]">{shownTitle}</div>
+        <div className="mt-0.5 line-clamp-2 text-xs leading-snug text-gray-600">{shownDescription}</div>
+      </div>
       <Field label="Meta title" aside={<CharCount value={metaTitle} limit={META_TITLE_LIMIT} />}>
         <Input
           value={metaTitle}
@@ -228,12 +230,6 @@ export function SeoFields({
           className={textareaClass}
         />
       </Field>
-      <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
-        <div className="mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-400">Search preview</div>
-        <div className="truncate text-xs text-gray-600">{url}</div>
-        <div className="mt-0.5 line-clamp-1 text-[17px] leading-snug text-[#1a0dab]">{shownTitle}</div>
-        <div className="mt-1 line-clamp-2 text-[13px] leading-snug text-gray-600">{shownDescription}</div>
-      </div>
     </>
   );
 }
