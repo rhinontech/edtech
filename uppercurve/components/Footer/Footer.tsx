@@ -14,50 +14,50 @@ export function Footer() {
       />
 
       {/* Top CTA Banner Section */}
-      <div className="max-w-4xl mx-auto flex flex-col items-center text-center mb-14 relative">
+      {/* <div className="max-w-4xl mx-auto flex flex-col items-center text-center mb-14 relative"> */}
 
-        {/* Left Floating Graphic 1 */}
-        <div className="absolute max-sm:hidden -left-16 sm:-left-36 md:-left-44 -top-6 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
+      {/* Left Floating Graphic 1 */}
+      {/* <div className="absolute max-sm:hidden -left-16 sm:-left-36 md:-left-44 -top-6 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
           <img
             src="/footer/image1.avif"
             alt="Footer Left Graphic"
             className="w-full h-full object-contain drop-shadow-xl"
           />
-        </div>
+        </div> */}
 
-        {/* Right Floating Graphic 2 (Blurred for Depth) */}
-        <div className="absolute max-sm:hidden -right-12 sm:-right-28 md:-right-36 -top-4 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
+      {/* Right Floating Graphic 2 (Blurred for Depth) */}
+      {/* <div className="absolute max-sm:hidden -right-12 sm:-right-28 md:-right-36 -top-4 sm:top-32 w-16 h-16 sm:w-22 sm:h-22 md:w-32 md:h-32 pointer-events-none z-10">
           <img
             src="/footer/image3.avif"
             alt="Footer Right Graphic"
             className="w-full h-full object-contain drop-shadow-xl blur-[3px]"
           />
-        </div>
+        </div> */}
 
-        {/* Rocket Icon Badge */}
-        <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow-md mb-6 hover:scale-105 transition-transform cursor-pointer">
+      {/* Rocket Icon Badge */}
+      {/* <div className="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center shadow-md mb-6 hover:scale-105 transition-transform cursor-pointer">
           <span className="text-lg">🚀</span>
-        </div>
+        </div> */}
 
-        {/* Banner Headline */}
-        <h2 className="text-4xl sm:text-6xl font-black text-gray-900 tracking-tight leading-tight mb-4">
+      {/* Banner Headline */}
+      {/* <h2 className="text-4xl sm:text-6xl font-black text-gray-900 tracking-tight leading-tight mb-4">
           <TextAnimation>Your Career Should</TextAnimation> <br /><TextAnimation> Keep Moving Upward</TextAnimation>
         </h2>
 
         <p className="text-xs sm:text-sm font-normal text-gray-500 max-w-sm mb-8 leading-relaxed">
           Programs, real projects, mentorship, events, and a community built for ambitious careers.
-        </p>
+        </p> */}
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap max-sm:flex-col items-center justify-center gap-4">
+      {/* Action Buttons */}
+      {/* <div className="flex flex-wrap max-sm:flex-col items-center justify-center gap-4">
           <Link href="/#programs">
             <PrimaryButton>Explore programs</PrimaryButton>
           </Link>
           <Link href="/#community">
             <SecondaryButton>Join the community</SecondaryButton>
           </Link>
-        </div>
-      </div >
+        </div> */}
+      {/* </div > */}
 
       {/* Main Footer Links & Info Grid */}
       < div className="max-w-6xl mx-auto" >
