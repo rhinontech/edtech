@@ -20,7 +20,7 @@ export function Sidebar({ role, items }: { role: string; items: SidebarItemSumma
         <Wordmark dark className="text-lg" />
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 p-4">
+      <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
         {items.map((item) => {
           const href = `/${role}/${item.path}`;
           const active = pathname === href || pathname.startsWith(`${href}/`);

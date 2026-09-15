@@ -24,15 +24,18 @@ export default async function RoleLayout({ children, params }: LayoutProps<"/[ro
   }
 
   return (
-    <div className="flex min-h-screen flex-1">
+    // App shell: the viewport never scrolls — only <main> does — so the
+    // sidebar and topbar stay put. Sticky elements inside pages (editor
+    // headers, toolbars) stick to the top of <main>, just below the topbar.
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar + Topbar share the same navy background with no border
           between them, so they read as one dark shell wrapping the white
           content canvas. */}
       <Sidebar role={user.role.slug} items={user.sidebarItems} />
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         <Topbar user={user} />
-        <main className="flex-1 bg-white p-6 md:p-8">{children}</main>
+        <main className="min-h-0 flex-1 overflow-y-auto bg-white p-6 md:p-8">{children}</main>
       </div>
     </div>
   );

@@ -13,7 +13,9 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+// Long articles are sent as HTML in one request; images go through
+// /api/content/uploads, so this never has to carry file data.
+app.use(express.json({ limit: "2mb" }));
 app.use(morgan("dev"));
 
 app.use("/api", routes);

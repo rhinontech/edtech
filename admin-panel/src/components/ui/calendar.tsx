@@ -1,0 +1,49 @@
+"use client";
+
+import * as React from "react";
+import { DayPicker } from "react-day-picker";
+import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
+import { cn } from "@/lib/utils";
+
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+
+/** shadcn's Calendar, styled to this app's stone/blue palette. */
+export function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+  return (
+    <DayPicker
+      showOutsideDays={showOutsideDays}
+      className={cn("p-3", className)}
+      classNames={{
+        months: "flex flex-col sm:flex-row gap-2",
+        month: "flex flex-col gap-3",
+        month_caption: "flex justify-center pt-1 relative items-center h-8",
+        caption_label: "text-sm font-medium text-foreground",
+        nav: "flex items-center gap-1 absolute right-1 top-1 z-10",
+        button_previous:
+          "inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted disabled:opacity-40",
+        button_next:
+          "inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted disabled:opacity-40",
+        month_grid: "w-full border-collapse",
+        weekdays: "flex",
+        weekday: "text-muted-foreground rounded-md w-8 font-normal text-[0.72rem]",
+        week: "flex w-full mt-1",
+        day: "h-8 w-8 p-0 text-center text-sm",
+        day_button:
+          "h-8 w-8 rounded-md font-normal text-foreground/85 hover:bg-muted aria-selected:bg-primary aria-selected:text-primary-foreground",
+        selected: "[&>button]:bg-primary [&>button]:text-primary-foreground [&>button]:hover:bg-primary/90",
+        today: "[&>button]:border [&>button]:border-blue-400 [&>button]:text-blue-700 [&>button]:font-semibold",
+        outside: "[&>button]:text-muted-foreground/70",
+        disabled: "[&>button]:text-muted-foreground/70 [&>button]:cursor-not-allowed",
+        hidden: "invisible",
+        ...classNames,
+      }}
+      components={{
+        Chevron: ({ orientation, className }) =>
+          orientation === "left"
+            ? <TbChevronLeft size={15} className={className} />
+            : <TbChevronRight size={15} className={className} />,
+      }}
+      {...props}
+    />
+  );
+}

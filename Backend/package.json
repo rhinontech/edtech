@@ -9,6 +9,7 @@
     "dev": "nodemon server.js",
     "migrate": "sequelize-cli db:migrate",
     "seed": "sequelize-cli db:seed:all",
+    "seed:content": "node src/scripts/seedLandingContent.js",
     "db:create": "sequelize-cli db:create",
     "db:setup": "npm run db:create && npm run migrate && node src/utils/bootstrapSuperadmin.js"
   },
@@ -17,14 +18,17 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1132.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
+    "multer": "^2.4.0",
     "pg": "^8.23.0",
     "pg-hstore": "^2.3.4",
+    "sanitize-html": "^2.17.7",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {

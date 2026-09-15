@@ -1,0 +1,146 @@
+{
+  "blogs": [
+    {
+      "slug": "how-to-learn-ai-in-2026",
+      "title": "How to Learn AI in 2026 Without Drowning",
+      "excerpt": "New models ship weekly and every feed screams 'you're falling behind'. Here's a calmer, more effective way to build real AI skills.",
+      "category": "Artificial Intelligence",
+      "theme": "indigo",
+      "contentHtml": "<p>The hardest part of learning AI today isn't the math or the tooling — it's the noise. Every week brings a new model, a new framework, and a new thread insisting that everything you learned last month is obsolete. If you try to follow all of it, you'll spend your energy keeping up instead of building up.</p><h2>Pick one lane and stay in it for a quarter</h2><p>Choose a single track — building with LLM APIs, data and automation, or AI-assisted product work — and commit to it for three months. Depth compounds; skimming doesn't. A quarter is long enough to build real projects and short enough to change course if the lane isn't for you.</p><h2>Build something small every week</h2><p>Reading about AI is not learning AI. A weekly build — however small — forces you to touch real constraints: context limits, flaky outputs, latency, cost. Those constraints are the actual curriculum.</p><ul><li><p>Week one: automate one boring task in your own life</p></li><li><p>Week two: add an AI feature to something you already built</p></li><li><p>Week three: rebuild someone else's demo from scratch, no copy-paste</p></li><li><p>Week four: ship one of the three publicly and write down what broke</p></li></ul><h2>Fundamentals outlive frameworks</h2><p>Prompting patterns, evaluation habits, knowing when AI is the wrong tool — these transfer across every model generation. The library you learned this month might not survive the year; your judgment will.</p><blockquote><p>You don't fall behind by missing a model launch. You fall behind by not building.</p></blockquote>",
+      "readTime": "6 min read",
+      "publishDate": "2026-07-28",
+      "authorName": "UpperCurve Editorial",
+      "authorRole": "",
+      "status": "Published"
+    },
+    {
+      "slug": "your-first-tech-interview",
+      "title": "Your First Tech Interview: What Actually Matters",
+      "excerpt": "Interviews feel like exams, but they're graded more like conversations. What interviewers actually listen for — and how to practice it.",
+      "category": "Careers & Interviews",
+      "theme": "cyan",
+      "contentHtml": "<p>Most first-time candidates prepare for interviews the way they prepared for college exams: memorize a syllabus, hope the questions match. But interviewers aren't grading recall. They're trying to answer one question — what would it be like to work with you on a real problem?</p><h2>Thinking out loud beats the right answer</h2><p>A candidate who narrates their reasoning, checks assumptions, and recovers from a wrong turn scores higher than one who silently produces a correct answer. Practice verbalizing your thought process on easy problems until it feels natural on hard ones.</p><h2>Your projects are your best material</h2><p>Every project you've built is a bank of stories: a decision you made, a trade-off you weighed, a bug that humbled you. Prepare three of these in detail. Specific beats impressive — a small project you understand deeply outperforms a big one you can't explain.</p><h2>Questions are part of the interview</h2><ul><li><p>Ask what the team is building this quarter — it shows you think in real work, not titles</p></li><li><p>Ask how they onboard juniors — it shows you plan to grow deliberately</p></li><li><p>Skip questions you could answer with one search</p></li></ul><blockquote><p>The interview starts as an exam and ends as a conversation. The sooner you make that switch, the better it goes.</p></blockquote>",
+      "readTime": "7 min read",
+      "publishDate": "2026-07-14",
+      "authorName": "UpperCurve Editorial",
+      "authorRole": "",
+      "status": "Published"
+    },
+    {
+      "slug": "side-projects-that-get-you-hired",
+      "title": "Side Projects That Actually Get You Hired",
+      "excerpt": "Not all side projects are equal. The ones that open doors share three traits — and none of them is 'took six months to build'.",
+      "category": "Careers & Interviews",
+      "theme": "emerald",
+      "contentHtml": "<p>Hiring managers see a lot of portfolios. Most are a wall of tutorial clones — the same todo app, the same dashboard, the same dataset. The projects that make someone stop scrolling are different in kind, not in size.</p><h2>Solve a problem you actually have</h2><p>Projects born from real annoyance have texture that tutorials can't fake: weird edge cases, opinionated choices, an obvious answer to 'why did you build this?'. That story is what carries an interview.</p><h2>Finished and small beats ambitious and abandoned</h2><p>A deployed link, a readme that explains the decisions, and one real user — even if that user is you — signals follow-through. An unfinished platform signals the opposite, no matter how grand the vision.</p><h2>Write about what broke</h2><p>A short write-up of what went wrong and what you'd do differently is rarer than the project itself. It demonstrates the skill teams actually hire for: learning from your own work.</p><ul><li><p>Ship one thing end-to-end, however small</p></li><li><p>Put the decisions and trade-offs in the readme</p></li><li><p>Share it where people can react to it</p></li><li><p>Let the next project build on what the last one taught you</p></li></ul>",
+      "readTime": "5 min read",
+      "publishDate": "2026-06-30",
+      "authorName": "UpperCurve Editorial",
+      "authorRole": "",
+      "status": "Published"
+    },
+    {
+      "slug": "product-thinking-for-engineers",
+      "title": "Product Thinking for Engineers",
+      "excerpt": "The engineers who grow fastest aren't just better at code — they're better at knowing which code is worth writing.",
+      "category": "Product & Business",
+      "theme": "fuchsia",
+      "contentHtml": "<p>Early in your career it feels like the job is to build what you're told, well. But the engineers who become indispensable operate one level up: they understand why the thing is being built, who it's for, and what 'working' actually means for the user.</p><h2>Ask 'what problem does this solve?' before 'how do I build it?'</h2><p>Half of all rework comes from building the right solution to the wrong problem. One clarifying conversation before you open the editor is the highest-leverage engineering practice that involves no engineering.</p><h2>Learn to love the cut list</h2><p>Product thinking is mostly subtraction. When you propose removing scope to ship sooner — and can explain what's lost and why it's acceptable — you're doing the job of someone two levels above you.</p><h2>Sit close to the user</h2><ul><li><p>Watch one real person use what you built — it will change how you build</p></li><li><p>Read support tickets for your area; they're a free roadmap</p></li><li><p>Measure one thing per feature that tells you if it mattered</p></li></ul><blockquote><p>Code answers 'how'. Product thinking answers 'whether'. Teams need people fluent in both.</p></blockquote>",
+      "readTime": "6 min read",
+      "publishDate": "2026-06-12",
+      "authorName": "UpperCurve Editorial",
+      "authorRole": "",
+      "status": "Published"
+    },
+    {
+      "slug": "the-case-for-building-in-public",
+      "title": "The Case for Building in Public",
+      "excerpt": "Sharing work-in-progress feels risky when you're early in your career. It's actually the cheapest career accelerant available.",
+      "category": "Learning & Growth",
+      "theme": "amber",
+      "contentHtml": "<p>The instinct is to wait — share the project when it's polished, write the post when you're an expert. But waiting optimizes for an audience you don't have yet, and it costs you the compounding benefits of being visible while you learn.</p><h2>Visibility compounds like interest</h2><p>A weekly update on what you're building does three jobs at once: it documents your growth, it makes you findable by people hiring for exactly what you're learning, and it forces the clarity that comes from explaining your work to someone else.</p><h2>Nobody remembers your rough drafts</h2><p>The fear is that early, imperfect work will define you. In practice, feeds move on in hours — but the habit of shipping publicly stays, and the people who found you through it stay too.</p><h2>Start smaller than feels worthwhile</h2><ul><li><p>One screenshot of what you built this week</p></li><li><p>One thing that broke and how you fixed it</p></li><li><p>One question you're stuck on — people love to help</p></li></ul><blockquote><p>Build in public isn't about performing expertise. It's about learning where people can see it.</p></blockquote>",
+      "readTime": "5 min read",
+      "publishDate": "2026-05-27",
+      "authorName": "UpperCurve Editorial",
+      "authorRole": "",
+      "status": "Published"
+    },
+    {
+      "slug": "lessons-from-48-hour-build-jams",
+      "title": "What 48-hour Build Jams Teach You That Courses Can't",
+      "excerpt": "Two days, one real brief, a team you just met. Why time-boxed team builds are the fastest growth environment we know.",
+      "category": "Community & Events",
+      "theme": "rose",
+      "contentHtml": "<p>Courses teach skills in isolation: clean inputs, known outputs, one right answer. Real work is nothing like that — and neither is a build jam. A time-boxed team build compresses a quarter's worth of real-work lessons into a weekend.</p><h2>Scoping under pressure is the real skill</h2><p>With 48 hours on the clock, every team faces the same brutal question: what do we cut? Learning to find the smallest version that still solves the problem is the most transferable skill in tech — and no lecture teaches it like a deadline does.</p><h2>You learn how you work with strangers</h2><p>Working with people you just met surfaces everything: how you divide work, how you disagree, how you handle someone missing a deadline at 2 AM. These are the exact dynamics of a new job — rehearsed in a weekend, with zero career risk.</p><h2>Demos change your relationship with feedback</h2><p>Presenting something unfinished to a room and watching people react is uncomfortable exactly once. After that, feedback stops being scary and starts being fuel — which might be the single biggest unlock for early-career growth.</p><blockquote><p>The artifact you ship in a jam matters less than the person you are on Monday.</p></blockquote>",
+      "readTime": "6 min read",
+      "publishDate": "2026-05-08",
+      "authorName": "UpperCurve Editorial",
+      "authorRole": "",
+      "status": "Published"
+    }
+  ],
+  "events": [
+    {
+      "slug": "building-with-ai-tools",
+      "title": "Building with AI Tools",
+      "tagline": "A hands-on workshop: build a working AI-powered mini-project in two hours and take it home.",
+      "type": "Workshop",
+      "mode": "Online",
+      "location": "Online · Zoom",
+      "startDate": "2026-08-22",
+      "endDate": null,
+      "timeLabel": "6:00 PM IST",
+      "theme": "indigo",
+      "aboutHtml": "<p>AI tooling is moving faster than any syllabus can keep up with. This workshop skips the theory dump and goes straight to building: you'll pick a small, real problem and ship a working AI-powered solution before the session ends.</p><p>You'll work alongside mentors who build with these tools daily. Bring a laptop and a problem you'd love to automate — leave with something running, and the confidence to keep going.</p>",
+      "agenda": [
+        {
+          "time": "6:00 PM",
+          "item": "Kickoff — what we're building and why it matters"
+        },
+        {
+          "time": "6:20 PM",
+          "item": "Guided build: wiring up your first AI workflow"
+        },
+        {
+          "time": "7:10 PM",
+          "item": "Open build time with mentors on call"
+        },
+        {
+          "time": "7:45 PM",
+          "item": "Show & tell + where to take it next"
+        }
+      ],
+      "takeaways": [
+        "A working AI mini-project you built yourself",
+        "A practical mental model for choosing AI tools",
+        "Starter templates you can reuse on your next idea"
+      ],
+      "audience": [
+        "Working professionals looking to level up with modern AI tooling",
+        "Developers who want to build and ship real agentic workflows",
+        "No heavy math or machine learning degree required — bring your curiosity & laptop"
+      ],
+      "poster": {
+        "ribbon": "FOR WORKING PROFESSIONALS",
+        "title": "Building AI Agents",
+        "subtitle": "Your Gateway To AI Career Switch",
+        "badgeText": "FREE LIVE",
+        "badgeType": "Masterclass"
+      },
+      "instructor": {
+        "name": "Ankit Kumar",
+        "role": "AI Engineer & Mentor",
+        "avatar": "/instructor/image1.avif",
+        "bio": "Experienced software engineer with extensive background building production-grade autonomous agent workflows, RAG pipelines, and high-throughput systems. Mentored over 2,000+ engineers making their transition into modern AI tooling.",
+        "highlights": [
+          "Ex-Tech Lead",
+          "2,000+ Mentees",
+          "4.9/5 Rating"
+        ]
+      },
+      "priceLabel": "100% Free",
+      "certificateLabel": "Included (Free)",
+      "status": "Published"
+    }
+  ]
+}
