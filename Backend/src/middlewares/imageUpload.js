@@ -1,7 +1,5 @@
 const multer = require("multer");
-const { IMAGE_MIME_TYPES } = require("../utils/storage");
-
-const MAX_IMAGE_MB = 8;
+const { IMAGE_MIME_TYPES, MAX_IMAGE_MB } = require("../utils/storage");
 
 // Held in memory only long enough to stream to S3.
 const upload = multer({

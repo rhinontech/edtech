@@ -28,6 +28,11 @@ router.patch("/events/:id", events, asyncHandler(eventsController.update));
 router.delete("/events/:id", events, asyncHandler(eventsController.remove));
 
 router.post(
+  "/uploads/sign",
+  requireSidebarItem("blogs", "events"),
+  asyncHandler(uploadsController.signImageUpload)
+);
+router.post(
   "/uploads",
   requireSidebarItem("blogs", "events"),
   imageUpload,
