@@ -89,13 +89,11 @@ export function Footer() {
               Site map
             </div>
             {[
-              { name: "Overview", href: "/#overview" },
-              { name: "Programs", href: "/#programs" },
-              { name: "Mentorship", href: "/#mentorship" },
-              { name: "Community", href: "/#community" },
+              { name: "Courses", href: "/#courses" },
               { name: "Events", href: "/events" },
-              { name: "Blog", href: "/blog" },
-              { name: "FAQs", href: "/#faqs" },
+              { name: "Community", href: "/community" },
+              { name: "Blogs", href: "/blog" },
+              { name: "Jobs", href: "/#jobs" },
             ].map((link) => (
               <div key={link.name}>
                 <Link href={link.href} className="text-sm font-bold text-gray-900 hover:text-black transition-colors">
@@ -129,8 +127,16 @@ export function Footer() {
               <a href="#" className="w-9 h-9 rounded-xl bg-gray-200/80 hover:bg-gray-300 text-gray-700 flex items-center justify-center text-xs font-bold transition-all">
                 𝕏
               </a>
-              <a href="#" className="w-9 h-9 rounded-xl bg-gray-200/80 hover:bg-gray-300 text-gray-700 flex items-center justify-center text-xs font-bold transition-all">
-                📷
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="w-9 h-9 rounded-xl bg-gray-200/80 hover:bg-gray-300 text-gray-700 flex items-center justify-center text-xs font-bold transition-all"
+              >
+                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
               </a>
             </div>
 
@@ -146,9 +152,9 @@ export function Footer() {
 
             {/* Bottom Enroll CTA button */}
             <div>
-              <button className="w-full bg-gray-200/80 hover:bg-gray-300/80 text-gray-900 font-bold text-sm py-3.5 rounded-full transition-all shadow-sm">
+              <Link href="/community" className="w-full px-5 bg-gray-200/80 hover:bg-gray-300/80 text-gray-900 font-bold text-sm py-3.5 rounded-full transition-all shadow-sm">
                 Join the community
-              </button>
+              </Link>
             </div>
           </div>
 
