@@ -30,6 +30,31 @@ html.lenis, html.lenis body {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-poppins: var(--font-poppins);
+}
+
+.font-poppins {
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
+}
+
+.blog-details-page h1,
+.blog-details-page h2,
+.blog-details-page h3,
+.blog-details-page h4,
+.blog-details-page .blog-time {
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
+}
+
+.blog-content {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+}
+
+.blog-content p,
+.blog-content ul,
+.blog-content ol,
+.blog-content li,
+.blog-content blockquote {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
 }
 
 html, body {

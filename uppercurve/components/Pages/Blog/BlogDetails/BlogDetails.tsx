@@ -46,20 +46,20 @@ function Block({ block }: { block: ContentBlock }) {
       return (
         <h2
           id={slugifyHeading(block.text)}
-          className="text-2xl sm:text-[28px] font-bold text-[#111827] tracking-tight leading-snug pt-6 pb-2 scroll-mt-28 font-[family-name:var(--font-plus-jakarta)]"
+          className="text-2xl sm:text-[36px] font-[500] text-[#111827] tracking-tight leading-snug pt-6 pb-2 scroll-mt-28 font-poppins"
         >
           {block.text}
         </h2>
       );
     case "p":
       return (
-        <p className="font-serif text-[#374151] text-[17px] sm:text-[18px] leading-[1.8] font-normal">
+        <p className="blog-content font-serif text-[#374151] text-[17px] sm:text-[18px] leading-[1.8] font-normal">
           {formatInlineText(block.text)}
         </p>
       );
     case "list":
       return (
-        <ul className="space-y-2.5 my-3 pl-5 list-disc text-[#374151] font-serif text-[17px] sm:text-[18px] leading-[1.75]">
+        <ul className="blog-content space-y-2.5 my-3 pl-5 list-disc text-[#374151] font-serif text-[17px] sm:text-[18px] leading-[1.75]">
           {block.items.map((item, idx) => (
             <li key={idx}>
               {formatInlineText(item)}
@@ -69,7 +69,7 @@ function Block({ block }: { block: ContentBlock }) {
       );
     case "quote":
       return (
-        <blockquote className="my-6 border-l-4 border-indigo-600 bg-gray-50/70 rounded-r-xl px-6 py-4 text-[17px] sm:text-[18px] italic font-serif text-[#1f2937] leading-relaxed">
+        <blockquote className="blog-content my-6 border-l-4 border-indigo-600 bg-gray-50/70 rounded-r-xl px-6 py-4 text-[17px] sm:text-[18px] italic font-serif text-[#1f2937] leading-relaxed">
           “{block.text}”
         </blockquote>
       );
@@ -121,7 +121,7 @@ export function BlogDetails({ post }: { post: BlogPost }) {
   };
 
   return (
-    <main className="min-h-screen bg-white flex flex-col items-center">
+    <main className="min-h-screen bg-white flex flex-col items-center blog-details-page">
       <div className="w-full max-w-6xl mx-auto px-5 md:px-6 pt-6 pb-24">
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center gap-2 text-[13px] mt-10 text-gray-500 font-medium mb-4">
@@ -133,7 +133,7 @@ export function BlogDetails({ post }: { post: BlogPost }) {
         </nav>
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#111827] tracking-tight leading-[1.2] mb-6 font-[family-name:var(--font-plus-jakarta)]">
+        <h1 className="text-3xl sm:text-4xl lg:text-[52px] font-[500] text-[#111827] tracking-tight leading-[1.2] mb-6 font-poppins">
           {post.title}
         </h1>
 
@@ -147,10 +147,10 @@ export function BlogDetails({ post }: { post: BlogPost }) {
               </svg>
             </div>
             <div>
-              <div className="text-sm font-bold text-gray-900 leading-snug">
+              <div className="text-sm font-bold text-gray-900 leading-snug font-poppins">
                 UpperCurve Academy
               </div>
-              <div className="text-xs text-gray-500 font-medium">
+              <div className="text-xs text-gray-500 font-medium font-poppins blog-time">
                 Date: {post.dateLabel}
               </div>
             </div>
@@ -233,7 +233,7 @@ export function BlogDetails({ post }: { post: BlogPost }) {
           {/* Sticky Contents Sidebar */}
           <aside className="w-full lg:w-[280px] shrink-0 lg:sticky lg:top-24">
             <div className="bg-[#f8f9fa] rounded-2xl border border-gray-200/80 p-5 shadow-xs">
-              <h3 className="text-base font-bold text-gray-900 mb-3.5">Contents</h3>
+              <h3 className="text-base font-bold text-gray-900 mb-3.5 font-poppins">Contents</h3>
               <nav className="flex flex-col space-y-2.5">
                 {headings.map((heading) => {
                   const headingId = slugifyHeading(heading.text);
@@ -263,7 +263,7 @@ export function BlogDetails({ post }: { post: BlogPost }) {
             </div>
 
             {/* Content Blocks */}
-            <div className="space-y-6">
+            <div className="space-y-6 blog-content">
               {post.content.map((block, idx) => (
                 <Block key={idx} block={block} />
               ))}
@@ -274,7 +274,7 @@ export function BlogDetails({ post }: { post: BlogPost }) {
         {/* Related Blogs */}
         <div className="mt-20 pt-10 border-t border-gray-200/80">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl sm:text-[28px] font-bold text-gray-900 tracking-tight font-[family-name:var(--font-plus-jakarta)]">
+            <h2 className="text-2xl sm:text-[28px] font-bold text-gray-900 tracking-tight font-poppins">
               Related Blogs
             </h2>
             <Link
@@ -324,7 +324,7 @@ export function BlogDetails({ post }: { post: BlogPost }) {
                         </div>
 
                         <div className="relative z-10">
-                          <h4 className="text-white font-bold text-xs sm:text-sm line-clamp-2 leading-snug">
+                          <h4 className="text-white font-bold text-xs sm:text-sm line-clamp-2 leading-snug font-poppins">
                             {other.title}
                           </h4>
                         </div>
@@ -333,12 +333,12 @@ export function BlogDetails({ post }: { post: BlogPost }) {
                   </div>
 
                   {/* Title */}
-                  <h3 className="mt-3 text-sm sm:text-[15px] font-bold text-[#111827] group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug font-[family-name:var(--font-plus-jakarta)]">
+                  <h3 className="mt-3 text-sm sm:text-[15px] font-bold text-[#111827] group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug font-poppins">
                     {other.title}
                   </h3>
 
                   {/* Date & Read Time */}
-                  <p className="mt-1 text-xs text-gray-500 font-normal">
+                  <p className="mt-1 text-xs text-gray-500 font-normal font-poppins blog-time">
                     Date: {other.dateLabel} • {other.readTime}
                   </p>
                 </Link>
