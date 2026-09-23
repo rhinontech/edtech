@@ -29,13 +29,12 @@ export function BlogPoster({
 
         <div>
           <div
-            className={`text-white font-black tracking-tight leading-[1.08] ${
-              featured ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl"
-            }`}
+            className={`text-white font-[500] tracking-tight leading-[1.08] font-poppins ${featured ? "text-2xl sm:text-3xl md:text-4xl" : "text-xl sm:text-2xl"
+              }`}
           >
             {post.title}
           </div>
-          <div className="mt-3 text-xs font-semibold text-white/75 tracking-wide">
+          <div className="mt-3 text-xs font-semibold text-white/75 tracking-wide font-poppins blog-time">
             {post.dateLabel} · {post.readTime}
           </div>
         </div>
